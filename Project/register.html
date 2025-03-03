@@ -1,0 +1,55 @@
+<html>
+<head>
+    <title>Register</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- bootstrap js -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <!-- Main scripts -->
+    <script type="text/javascript">
+        function validateForm() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var password2 = document.getElementById("password2").value;
+            if (username == "" || password == "" || password2 == "") {
+                alert("Username and password must be filled out");
+                return false;
+            }
+            if (password != password2) {
+                alert("Passwords do not match");
+                return false;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "user/register",
+                data: {username: username, password: password},
+                success: function(data) {
+                    if (data == "success") {
+                        window.location.href = "login.html";
+                    } else {
+                        alert("Username already exists");
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <form action="user/register" method="post">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required>
+        <br>
+        <label for="password2">Confirm Password:</label>
+        <input type="password" name="password2" id="password2" required>
+        <br>
+        <input onclick="validateForm()" value="Register">
+    </form>
+</body>
+</html>
