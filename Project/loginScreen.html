@@ -12,12 +12,25 @@
     <!-- Main scripts -->
     <scrtipt type="text/javascript">
         function validateForm() {
-           var username = document.getElementById("username").value;
+            var username = document.getElementById("username").value;
             var password = document.getElementById("password").value;
             if (username == "" || password == "") {
                 alert("Username and password must be filled out");
                 return false;
             }
+
+            $.ajax({
+                type: "POST",
+                url: "user/login",
+                data: {username: username, password: password},
+                success: function(data) {
+                    if (data == "success") {
+                        window.location.href = "view.html";
+                    } else {
+                        alert("Invalid username or password");
+                    }
+                }
+            });
         }
     </scrtipt>
 </head>
