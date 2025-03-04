@@ -35,6 +35,8 @@ class Register(Resource):
         if len(name)>30 or not name.isalnum():
             rejectionReason+="Your username is either over the character limit(30)\n"
             rejectionReason+="Or your username did not only contain alphanumerics (a-Z,0-9)\n"
+        elif len(name)<4:
+            rejectionReason+="Your username is under the character limit(4)\n"
         if len(password)>255 or not password.isalnum():
             rejectionReason+="Your password is either over the character limit(255)\n"
             rejectionReason+="Or your password did not only contain alphanumerics (a-Z,0-9)\n"
