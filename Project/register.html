@@ -1,13 +1,23 @@
 <html>
 <head>
     <title>Register</title>
-    <!-- bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- bootstrap js -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.3/cosmo/bootstrap.rtl.min.css" integrity="sha512-yDCmOPMQAJWahchoDC25QrjYn/ccyX5hHk53mbc4FH7M+3T42jqyiTEdDLD21Y5ZpkQ6+K2dAuqu2BjXQpuIVQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-+6zvz5z5Z2j" crossorigin="anonymous" />
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Ajax -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+    <!-- Toastr.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <!-- Main scripts -->
     <script type="text/javascript">
         function validateForm() {
@@ -15,19 +25,19 @@
             var password = document.getElementById("password").value;
             var password2 = document.getElementById("password2").value;
             if (username == "" || password == "" || password2 == "") {
-                alert("Username and password must be filled out");
+                toastr.error("Username and password must be filled out");
                 return false;
             }
             if (password != password2) {
-                alert("Passwords do not match");
+                toastr.error("Passwords do not match");
                 return false;
             }
             if (username.length < 4) {
-                alert("Username must be at least 4 characters long");
+                toastr.error("Username must be at least 4 characters long");
                 return false;
             }
             if (password.length < 8) {
-                alert("Password must be at least 8 characters long");
+                toastr.error("Password must be at least 8 characters long");
                 return false;
             }
             $.ajax({
@@ -35,10 +45,10 @@
                 url: "http://" + window.location.hostname + ":8037/register",
                 data: {username: username, user_password: password},
                 success: function(data) {
-                    if (data == "success") {
+                    if (data.status && data.status === "success") {
                         window.location.href = "login.html";
                     } else {
-                        alert("Username already exists");
+                        toastr.error(data);
                     }
                 }
             });
@@ -46,17 +56,32 @@
     </script>
 </head>
 <body>
-    <form action="/register" method="post">
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" required>
-        <br>
-        <label for="password2">Confirm Password:</label>
-        <input type="password" name="password2" id="password2" required>
-        <br>
-        <input type="button" value="Register" onclick="validateForm()">
-    </form>
+    <div class="container mt-5"></div>
+        <h1 class="text-center my-4">Register</h1>
+        <form action="/register" method="post" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username:</label>
+                <input type="text" class="form-control" name="username" id="username" required>
+                <div class="invalid-feedback">
+                    Please enter a username.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" class="form-control" name="password" id="password" required>
+                <div class="invalid-feedback">
+                    Please enter a password.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="password2" class="form-label">Confirm Password:</label>
+                <input type="password" class="form-control" name="password2" id="password2" required>
+                <div class="invalid-feedback">
+                    Please confirm your password.
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="validateForm()">Register</button>
+        </form>
+    </div>
 </body>
 </html>
