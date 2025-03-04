@@ -50,7 +50,7 @@
             }
             $.ajax({
                 type: "POST",
-                url: "http://" + window.location.hostname + ":8037/register",
+                url: "https://" + window.location.hostname + ":8037/register",
                 contentType: "application/json",
                 data: JSON.stringify({ username: username, email: email, user_password: password }),
                 success: function (data) {
