@@ -29,15 +29,12 @@ class Register(Resource):
         rejectionReason=""
 
         #Data
-        print("Got to data")
         data=request.json
-        print("Got to data read")
         name=data['username']
+        email=data['email']
         password=data['user_password']
-        #email=data['email']
 
         #Pre-DB validation
-        print("Got to validation")
         if len(name)>30 or not name.isalnum():
             rejectionReason+="Your username is either over the character limit(30)\n"
             rejectionReason+="Or your username did not only contain alphanumerics (a-Z,0-9)\n"
@@ -52,7 +49,6 @@ class Register(Resource):
             return make_response(jsonify({"response": rejectionReason}),400)
 
         #Add user in user table
-        print("Got to sql")
         sqlProc='registerUser'
         password_hash=hashlib.sha512(password.encode("UTF-8")).hexdigest()
         sqlArgs = [name,password_hash,]
@@ -64,7 +60,9 @@ class Register(Resource):
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
 
         #Add new user in emails table
+        print("Got to preValidate")
         new_user_id=rows[0]['user_id']
+        print(new_user_id)
         sqlProc='preValidateUser'
         email_hash=hashlib.sha512(email.encode("UTF-8")).hexdigest()
         sqlArgs=[new_user_id,email,email_hash]
