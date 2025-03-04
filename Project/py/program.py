@@ -40,6 +40,8 @@ class Register(Resource):
         if len(password)>255 or not password.isalnum():
             rejectionReason+="Your password is either over the character limit(255)\n"
             rejectionReason+="Or your password did not only contain alphanumerics (a-Z,0-9)\n"
+        elif len(password)<8:
+            rejectionReason+="Your password is under the character limit(8)\n"
         if rejectionReason:
             return make_response(jsonify({"response": rejectionReason}),400)
 
