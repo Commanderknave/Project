@@ -25,10 +25,11 @@
     <script type="text/javascript">
         function validateForm() {
             var username = document.getElementById("username").value;
+            var email = document.getElementById("email").value;
             var password = document.getElementById("password").value;
             var password2 = document.getElementById("password2").value;
-            if (username == "" || password == "" || password2 == "") {
-                toastr.error("Username and password must be filled out");
+            if (username == "" || email == "" || password == "" || password2 == "") {
+                toastr.error("All fields must be filled out");
                 return false;
             }
             if (password != password2) {
@@ -43,11 +44,15 @@
                 toastr.error("Password must be at least 8 characters long");
                 return false;
             }
+            if (!validateEmail(email)) {
+                toastr.error("Invalid email format");
+                return false;
+            }
             $.ajax({
                 type: "POST",
+                url: "http://" + window.location.hostname + ":8037/register",
                 contentType: "application/json",
-                url: "https://" + window.location.hostname + ":8037/register", 
-                data: JSON.stringify({username: username, user_password: password }),
+                data: JSON.stringify({ username: username, email: email, user_password: password }),
                 success: function (data) {
                     if (data.status && data.status === "success") {
                         window.location.href = "login.html";
@@ -56,6 +61,11 @@
                     }
                 }
             });
+        }
+
+        function validateEmail(email) {
+            var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
         }
     </script>
 </head>
@@ -103,6 +113,13 @@
                                 <input type="text" class="form-control" name="username" id="username" required>
                                 <div class="invalid-feedback">
                                     Please enter a username.
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email:</label>
+                                <input type="email" class="form-control" name="email" id="email" required>
+                                <div class="invalid-feedback">
+                                    Please enter an email.
                                 </div>
                             </div>
                             <div class="mb-3">
