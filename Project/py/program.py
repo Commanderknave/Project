@@ -24,13 +24,13 @@ api.add_resource(NAME, '/PATH')
 class Register(Resource):
     def post(self):
         rejectionReason=""
-        
+
         #Data
         data=request.json
         name=data['username']
         password=data['user_password']
         email=data['email']
-        
+
         #Pre-DB validation
         if len(name)>30 or not name.isalnum():
             rejectionReason+="Your username is either over the character limit(30)\n"
@@ -43,7 +43,8 @@ class Register(Resource):
 
         #Add user in user table
         sqlProc='registerUser'
-        sqlArgs = [name,password,]
+        password_hash=hashlib.sha512(password.encode("UTF-8"))
+        sqlArgs = [name,password_hash,]
         try:
             rows,count = db_access(sqlProc,sqlArgs)
         except Exception as e:
