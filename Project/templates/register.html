@@ -55,7 +55,7 @@
                 data: JSON.stringify({ username: username, email: email, user_password: password }),
                 success: function (data) {
                     if (data.status && data.status === "success") {
-                        window.location.href = "login.html";
+                        return window.location.href = "login.html";
                     } else {
                         toastr.error(data);
                     }
