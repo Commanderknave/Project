@@ -116,4 +116,5 @@ class Profile(Resource):
 api.add_resource(Profile, "/")
 
 if __name__ == "__main__":
-   app.run(host=DB_CONFIG.APP_HOST, port=DB_CONFIG.APP_PORT, debug=True)
+    context = ('cert.pem', 'key.pem')
+    app.run(host=DB_CONFIG.APP_HOST, port=DB_CONFIG.APP_PORT, debug=True, ssl_context=context)
