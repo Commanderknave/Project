@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask, request, make_response, jsonify
+from flask import Flask, request, make_response, jsonify, render_template
 from flask_restful import Resource, Api
 import hashlib
 import DB_CONFIG
@@ -22,6 +22,8 @@ api.add_resource(NAME, '/PATH')
 
 #region User Management
 class Register(Resource):
+    def get(self):
+        return render_template('../register.html')
     def post(self):
         rejectionReason=""
 
@@ -47,7 +49,7 @@ class Register(Resource):
 
         #Add user in user table
         sqlProc='registerUser'
-        password_hash=hashlib.sha512(password.encode("UTF-8"))
+        password_hash=hashlib.sha512(password.encode("UTF-8")).hexdigest()
         sqlArgs = [name,password_hash,]
         try:
             rows,count = db_access(sqlProc,sqlArgs)
@@ -71,14 +73,14 @@ class Register(Resource):
 api.add_resource(Register, '/register')
 
 class Validate(Resource):
-    def get(self,id):
+    def get(self,email_hash):
         sqlProc='validateUser'
-        sqlArgs = [id,]
+        sqlArgs = [email_hash,]
         rows,count = db_access(sqlProc,sqlArgs)
         if count==0:
             return make_response(jsonify({"response": "No changes applied"}), 200)
         return make_response(jsonify({"response": "User has been validated"}), 200)
-api.add_resource(Validate, "/validate/<int:id>")
+api.add_resource(Validate, "/validate/<string:email_hash>")
 
 class fetchUser(Resource):
     def get(self,user_id):

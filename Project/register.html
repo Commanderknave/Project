@@ -32,8 +32,8 @@
             }
             $.ajax({
                 type: "POST",
-                url: "user/register",
-                data: {username: username, password: password},
+                url: "http://cs3103.cs.unb.ca:8037/register",
+                data: {username: username, user_password: password},
                 success: function(data) {
                     if (data == "success") {
                         window.location.href = "login.html";
@@ -46,7 +46,7 @@
     </script>
 </head>
 <body>
-    <form action="user/register" method="post">
+    <form action="/register" method="post">
         <label for="username">Username:</label>
         <input type="text" name="username" id="username" required>
         <br>
