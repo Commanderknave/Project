@@ -59,6 +59,17 @@
                     } else {
                         toastr.error(data);
                     }
+                },
+                statusCode: {
+                    400: function () {
+                        toastr.error("Bad Request: Please check your input and try again.");
+                    },
+                    404: function () {
+                        toastr.error("Not Found: The requested resource could not be found.");
+                    },
+                    500: function () {
+                        toastr.error("Internal Server Error: Please try again later.");
+                    }
                 }
             });
         }
