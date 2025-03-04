@@ -1,3 +1,3 @@
-curl -i -X POST -H "Content-Type: application/json" -d '{"username": "JohnDoe", "user_password": "thisisapassword", "email": "JohnDoe73@host.com"}' http://cs3103.cs.unb.ca:5000/register
+curl -i -X POST -H "Content-Type: application/json" -d '{"username": "JohnDoe", "user_password": "thisisapassword", "email": "JohnDoe73@host.com"}' -k https://cs3103.cs.unb.ca:8037/register
 
-curl -i -X POST -H "Content-Type: application/json" -d '{"username": "JohnDoeJohnDoeJohnDoeJohnDoeJohnDoe", "user_password": "thisisapassword", "email": "JohnDoe73@host.com"}' http://cs3103.cs.unb.ca:5000/register
+curl -i -X POST -H "Content-Type: application/json" -d '{"username": "JohnDoeJohnDoeJohnDoeJohnDoeJohnDoe", "user_password": "thisisapassword", "email": "JohnDoe73@host.com"}' -k https://cs3103.cs.unb.ca:8037/register

@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 from flask import Flask, request, make_response, jsonify, render_template
 from flask_restful import Resource, Api
+from flask_cors import CORS
 import hashlib
 import DB_CONFIG
 from DB_UTIL import db_access
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="../templates")
 api = Api(app)
-
+CORS(app=app)
 '''
 
 class NAME(Resource):
@@ -23,17 +24,20 @@ api.add_resource(NAME, '/PATH')
 #region User Management
 class Register(Resource):
     def get(self):
-        return render_template('../register.html')
+        return make_response(render_template('register.html'))
     def post(self):
         rejectionReason=""
 
         #Data
+        print("Got to data")
         data=request.json
+        print("Got to data read")
         name=data['username']
         password=data['user_password']
-        email=data['email']
+        #email=data['email']
 
         #Pre-DB validation
+        print("Got to validation")
         if len(name)>30 or not name.isalnum():
             rejectionReason+="Your username is either over the character limit(30)\n"
             rejectionReason+="Or your username did not only contain alphanumerics (a-Z,0-9)\n"
@@ -48,6 +52,7 @@ class Register(Resource):
             return make_response(jsonify({"response": rejectionReason}),400)
 
         #Add user in user table
+        print("Got to sql")
         sqlProc='registerUser'
         password_hash=hashlib.sha512(password.encode("UTF-8")).hexdigest()
         sqlArgs = [name,password_hash,]

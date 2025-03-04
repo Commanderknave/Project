@@ -45,8 +45,9 @@
             }
             $.ajax({
                 type: "POST",
-                url: "http://" + window.location.hostname + ":8037/register",
-                data: { username: username, user_password: password },
+                contentType: "application/json",
+                url: "https://" + window.location.hostname + ":8037/register",
+                data: JSON.stringify({username: username, user_password: password }),
                 success: function (data) {
                     if (data.status && data.status === "success") {
                         window.location.href = "login.html";
