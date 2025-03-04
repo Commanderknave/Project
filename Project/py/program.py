@@ -60,9 +60,7 @@ class Register(Resource):
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
 
         #Add new user in emails table
-        print("Got to preValidate")
         new_user_id=rows[0]['user_id']
-        print(new_user_id)
         sqlProc='preValidateUser'
         email_hash=hashlib.sha512(email.encode("UTF-8")).hexdigest()
         sqlArgs=[new_user_id,email,email_hash]
