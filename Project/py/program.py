@@ -2,6 +2,7 @@
 from flask import Flask, request, make_response, jsonify, render_template
 from flask_restful import Resource, Api
 from flask_cors import CORS
+from flask_mail import Mail, Message
 import hashlib
 import DB_CONFIG
 from DB_UTIL import db_access
@@ -9,6 +10,15 @@ from DB_UTIL import db_access
 app = Flask(__name__, template_folder="../templates")
 api = Api(app)
 CORS(app=app)
+
+app.config['MAIL_SERVER']="smtp.gmail.com"
+app.config['MAIL_PORT']=465
+app.config['MAIL_USERNAME']="AwesomeInc@gmail.com"
+app.config['MAIL_PASSWORD']="thisisapassword"
+app.config['MAIL_TLS']=False
+app.config['MAIL_SSL']=True
+mail=Mail(app)
+
 '''
 
 class NAME(Resource):
@@ -70,8 +80,20 @@ class Register(Resource):
             print(e)
             #Delete user because of failed prevalidation?
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        message=Message(
+            subject="Validate your Games Wishlist account",
+            sender=app.config['MAIL_USERNAME'],
+            recipients=[email]
+        )
+        message.body=f"To validate your account please go to https://cs3103.cs.unb.ca:8037/validate/{str(email_hash)}"
+        mail.send(message)
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(Register, '/register')
+
+class EmailSent(Resource):
+    def get(self):
+        return make_response(render_template('emailSent.html'))
+api.add_resource(EmailSent, "/emailSent")
 
 class Validate(Resource):
     def get(self,email_hash):
@@ -79,7 +101,7 @@ class Validate(Resource):
         sqlArgs = [email_hash,]
         rows,count = db_access(sqlProc,sqlArgs)
         if count==0:
-            return make_response(jsonify({"response": "No changes applied"}), 200)
+            return make_response(jsonify({"response": "Forbidden Access"}), 403)
         return make_response(jsonify({"response": "User has been validated"}), 200)
 api.add_resource(Validate, "/validate/<string:email_hash>")
 
