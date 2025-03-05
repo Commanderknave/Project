@@ -17,7 +17,7 @@ app.config['MAIL_PORT']=25
 app.config['MAIL_USERNAME']="awesomeinc@unb.ca"
 app.config['MAIL_PASSWORD']="password"
 app.config['MAIL_TLS']=False
-app.config['MAIL_SSL']=True
+app.config['MAIL_SSL']=False
 mail=Mail(app)
 
 #region User Management
