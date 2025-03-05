@@ -3,9 +3,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <script>
-        $(function() { $("head").load("https://cs3103.cs.unb.ca/llosier1/Project/templates/static/header.html"); });
+        $(function() { 
+            $.ajax({
+                url: "https://cs3103.cs.unb.ca/llosier1/Project/templates/static/header.html",
+                method: "GET",
+                success: function(data) {
+                    $("head").append(data);
+                },
+                error: function() {
+                    console.error("Failed to load header.html");
+                }
+            });
+        });
     </script>
-
     <!-- Get request to validate email -->
     <script>
         $(document).ready(function() {
