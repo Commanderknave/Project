@@ -71,7 +71,7 @@ class Register(Resource):
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         message=Message(
             subject="Validate your Games Wishlist account",
-            sender=app.config['awesomeinc@unb.ca'],
+            sender=app.config['MAIL_USERNAME'],
             recipients=[email]
         )
         message.body=f"To validate your account please go to https://cs3103.cs.unb.ca:8037/validate/{str(email_hash)}"
