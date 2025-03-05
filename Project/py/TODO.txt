@@ -1,3 +1,1 @@
-If a user fails pre-validation, delete the created user
-If a user inputs an email which already exists in verified_emails during registration, also delete the newly created user.
-Eventually add a time limit to validation emails being valid.
+Add a time limit to validation emails being valid.

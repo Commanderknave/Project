@@ -11,6 +11,14 @@ BEGIN
 	SELECT * FROM users WHERE users.username=username;
 END //
 
+DROP PROCEDURE IF EXISTS deleteUser //
+CREATE PROCEDURE deleteUser(
+	IN user_id_in INT
+)
+BEGIN
+	DELETE FROM users WHERE user_id=user_id_in;
+END //
+
 DROP PROCEDURE IF EXISTS preValidateUser //
 CREATE PROCEDURE preValidateUser(
 	IN user_id INT,
@@ -39,11 +47,19 @@ END //
 
 DROP PROCEDURE IF EXISTS loginUser //
 CREATE PROCEDURE loginUser(
-	IN user_id INT
+	IN username_in VARCHAR(30),
+    IN user_password_in VARCHAR(255)
 )
 BEGIN
-	UPDATE users SET last_login=NOW() WHERE user_id=user_id;
-    SELECT * FROM users where user_id=user_id LIMIT 1;
+	SELECT * FROM users
+		INNER JOIN verified_emails ON users.user_id=verified_emails.user_id
+		WHERE username=username_in 
+			AND user_password=user_password_in
+            AND verified_emails.verification_time !=FROM_UNIXTIME(1);
+	IF (FOUND_ROWS()=1) THEN
+		UPDATE users SET last_login=NOW() WHERE username=username_in;
+        SELECT * FROM users where username=username_in;
+	END IF;
 END //
 
 DROP PROCEDURE IF EXISTS fetchRecentLogins //
@@ -62,10 +78,10 @@ END //
 
 DROP PROCEDURE IF EXISTS fetchUserByName //
 CREATE PROCEDURE fetchUserByName(
-	IN username VARCHAR(30)
+	IN username_in VARCHAR(30)
 )
 BEGIN
-	SELECT * FROM users WHERE username LIKE username;
+	SELECT * FROM users WHERE username=username_in;
 END //
 
 DROP PROCEDURE IF EXISTS addGame //

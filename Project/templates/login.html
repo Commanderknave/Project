@@ -35,11 +35,11 @@
 
             $.ajax({
                 type: "POST",
-                url: "https://" + window.location.hostname + ":8037/register",
+                url: "https://" + window.location.hostname + ":8037/login",
                 contentType: "application/json",
-                data: JSON.stringify({ username: username, email: email, user_password: password }),
+                data: JSON.stringify({ username: username, user_password: password }),
                 success: function (data) {
-                    if (data == "success") {
+                    if (data.response && data.response === "Operation Successful") {
                         window.location.href = "view";
                     } else {
                         alert("Invalid username or password");

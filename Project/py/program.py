@@ -64,7 +64,13 @@ class Register(Resource):
         except Exception as e:
             print(e)
             #Delete user because of failed prevalidation?
+            #Most common case is duplicate email.
+            sqlProc='deleteUser'
+            sqlArgs=[new_user_id,]
+            db_access(sqlProc,sqlArgs)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
+
+        #Email User
         message=Message(
             subject="Validate your Games Wishlist account",
             sender="awesomeinc@unb.ca",
@@ -72,6 +78,7 @@ class Register(Resource):
         )
         message.body=f"To validate your account please go to https://cs3103.cs.unb.ca:8037/validate/{str(email_hash)}"
         mail.send(message)
+
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(Register, '/register')
 
@@ -95,8 +102,12 @@ api.add_resource(Validate, "/validate/<string:email_hash>")
 class fetchUser(Resource):
     def get(self,user_id):
         sqlProc='fetchUser'
-        sqlArgs = [id,]
-        rows,count = db_access(sqlProc,sqlArgs)
+        sqlArgs = [user_id,]
+        try:
+            rows,count = db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
         if count !=1:
             return make_response(jsonify({"response": "User Not Found"}), 404)
         return make_response(jsonify({"response": rows[0]}), 200)
@@ -105,6 +116,47 @@ api.add_resource(fetchUser, "/fetchUser/<int:user_id>")
 class login(Resource):
     def get(self):
         return make_response(render_template('login.html'))
+    def post(self):
+        rejectionReason=""
+
+        #Data
+        data=request.json
+        username=data['username']
+        password=data['user_password']
+        password_hash=hashlib.sha512(password.encode("UTF-8")).hexdigest()
+
+        #Check if a user with the name exists
+        sqlProc='fetchUserByName'
+        sqlArgs=[username,]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        if count!=1:
+            rejectionReason+="No such user with that username"
+            return make_response(
+                jsonify({"response": "User Not Found", "reason": rejectionReason}), 404)
+
+        #Check for existing user
+        sqlProc='loginUser'
+        sqlArgs=[username,password_hash]
+        try:
+            rows,count=db_access(sqlProc, sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        #No such user
+        if count !=1:
+            rejectionReason+="Credentials may be invalid or this user is not yet validated"
+            return make_response(
+                jsonify({"response": "User Not Found", "reason": rejectionReason}), 404)
+            
+        #There is a user and they're validated
+        user=rows[0]
+        response=make_response(jsonify({"response": "Operation Successful"}), 200)
+        response.set_cookie("userId", value=str(user['user_id']))
+        return response
 api.add_resource(login, "/login")
 
 class fetchRecentLogins(Resource):
