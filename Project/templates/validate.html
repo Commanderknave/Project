@@ -17,22 +17,28 @@
                 success: function (data) {
                     if (data.response && data.response === "Operation Successful") {
                         toastr.success("Your email has been validated");
+                        $("#content").html('<h1>Your email has been validated</h1><p>Thank you for validating your email. You can now <a href="login">Login</a> to your account.</p>');
                     } else {
                         toastr.error(data.response);
+                        $("#content").html('<h1>Error</h1><p>' + data.response + '</p>');
                     }
                 },
                 statusCode: {
                     400: function () {
                         toastr.error("Bad Request: Please check your input and try again.");
+                        $("#content").html('<h1>Bad Request</h1><p>Please check your input and try again.</p>');
                     },
                     403: function () {
                         toastr.error("Forbidden: You are not authorized to access this resource.");
+                        $("#content").html('<h1>Forbidden</h1><p>You are not authorized to access this resource.</p>');
                     },
                     404: function () {
                         toastr.error("Not Found: The requested resource could not be found.");
+                        $("#content").html('<h1>Not Found</h1><p>The requested resource could not be found.</p>');
                     },
                     500: function () {
                         toastr.error("Internal Server Error: Please try again later.");
+                        $("#content").html('<h1>Internal Server Error</h1><p>Please try again later.</p>');
                     }
                 }
             });
@@ -48,10 +54,10 @@
             <div class="col-12 col-sm-10 col-md-8 col-lg-6">
                 <div class="card shadow-sm">
                     <div class="card-header text-center">
-                        <h1>Your email has been validated</h1>
+                        <h1>Email Validation</h1>
                     </div>
-                    <div class="card-body">
-                        <p>Thank you for validating your email. You can now <a href="login">Login</a> to your account.</p>
+                    <div class="card-body" id="content">
+                        <!-- Content will be loaded here based on the AJAX response -->
                     </div>
                 </div>
             </div>
