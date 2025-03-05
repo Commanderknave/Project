@@ -52,7 +52,7 @@
                 data: JSON.stringify({ username: username, email: email, user_password: password }),
                 success: function (data) {
                     if (data.response && data.response === "Operation Successful") {
-                        window.location.href = "https://" + window.location.hostname + ":8037/emailSent";
+                        window.location.href = "https://" + window.location.hostname + ":8037/login";
                     } else {
                         toastr.error(data.response);
                     }
@@ -110,50 +110,19 @@
             </div>
         </div>
     </nav>
-    <div class="container-xxl mt-5">
-        <div class="row justify-content-center">
-            <div class="col-12 col-sm-10 col-md-8 col-lg-6">
-                <div class="card shadow-sm">
-                    <div class="card-header text-center">
-                        <h1>Register</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 mt-5">
+                <div class="card">
+                    <div class="card-header">
+                        Email has been sent
                     </div>
                     <div class="card-body">
-                        <form action="/register" method="post" class="needs-validation" novalidate>
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username:</label>
-                                <input type="text" class="form-control" name="username" id="username" required>
-                                <div class="invalid-feedback">
-                                    Please enter a username.
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email:</label>
-                                <input type="email" class="form-control" name="email" id="email" required>
-                                <div class="invalid-feedback">
-                                    Please enter an email.
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password:</label>
-                                <input type="password" class="form-control" name="password" id="password" required>
-                                <div class="invalid-feedback">
-                                    Please enter a password.
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password2" class="form-label">Confirm Password:</label>
-                                <input type="password" class="form-control" name="password2" id="password2" required>
-                                <div class="invalid-feedback">
-                                    Please confirm your password.
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-primary w-100" onclick="validateForm()">Register</button>
-                        </form>
+                        <p>An email has been sent to the email address you provided. Please check your email and click the link to verify your account.</p>
+                        <p>Click <a href="/login">here</a> to log in once validated.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
-
-</html>
