@@ -53,7 +53,7 @@ class Register(Resource):
         try:
             rows, count = db_access(sqlProc, sqlArgs)
         except Exception as e:
-            if "Database Error:(1062" in str(e)):
+            if "Database Error:(1062" in str(e):
                 return make_response(jsonify({"response": "Duplicate Username"}), 400)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
 
