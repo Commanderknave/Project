@@ -51,9 +51,9 @@
                 contentType: "application/json",
                 data: JSON.stringify({ username: username, email: email, user_password: password }),
                 success: function (data) {
-                    print("Data: " + data)
+                    console.log("Data: " + data)
                     if (data.status && data.status === "success") {
-                        print("True and real")
+                        console.log("True and real")
                         window.location.href = "https://" + window.location.hostname + ":8037/login";
                     } else {
                         toastr.error(data);
