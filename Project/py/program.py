@@ -16,7 +16,7 @@ CORS(app=app)
 app.config['MAIL_SERVER'] = "smtp.gmail.com"
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = "awesomeinc34@gmail.com"
-app.config['MAIL_PASSWORD'] = "your_app_specific_password"  # Replace with your app-specific password
+app.config['MAIL_PASSWORD'] = "vhuf wzxk ercv thps"  # Replace with your app-specific password
 
 #region User Management
 class Register(Resource):
@@ -106,8 +106,8 @@ api.add_resource(Register, '/register')
 
 # app.config['MAIL_SERVER']="smtp.gmail.com"
 # app.config['MAIL_PORT']=465
-# app.config['MAIL_USERNAME']="awesomeinc34@gmail.com"
-# app.config['MAIL_PASSWORD']="hardcoreGamerWarrior98765432112"
+# app.config['MAIL_USERNAME']="AwesomeInc@gmail.com"
+# app.config['MAIL_PASSWORD']="thisisapassword"
 # app.config['MAIL_TLS']=False
 # app.config['MAIL_SSL']=True
 # mail=Mail(app)
