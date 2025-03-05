@@ -96,6 +96,7 @@ api.add_resource(fetchUser, "/fetchUser/<int:user_id>")
 class login(Resource):
     def get(self):
         return make_response(render_template('login.html'))
+api.add_resource(login, "/login")
 
 class fetchRecentLogins(Resource):
     pass
