@@ -51,12 +51,10 @@
                 contentType: "application/json",
                 data: JSON.stringify({ username: username, email: email, user_password: password }),
                 success: function (data) {
-                    console.log("Data: " + data)
                     if (data.status && data.status === "Operation Successful") {
-                        console.log("True and real")
                         window.location.href = "https://" + window.location.hostname + ":8037/login";
                     } else {
-                        toastr.error(data);
+                        toastr.error(data.status);
                     }
                 },
                 statusCode: {
