@@ -6,6 +6,39 @@
         $(function() { $("head").load("static/header.html"); });
     </script>
 
+    <!-- Get request to validate email -->
+    <script>
+        $(document).ready(function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var token = urlParams.get('token');
+            $.ajax({
+                type: "GET",
+                url: "https://" + window.location.hostname + ":8037/validate?token=" + token,
+                success: function (data) {
+                    if (data.response && data.response === "Operation Successful") {
+                        toastr.success("Your email has been validated");
+                    } else {
+                        toastr.error(data.response);
+                    }
+                },
+                statusCode: {
+                    400: function () {
+                        toastr.error("Bad Request: Please check your input and try again.");
+                    },
+                    403: function () {
+                        toastr.error("Forbidden: You are not authorized to access this resource.");
+                    },
+                    404: function () {
+                        toastr.error("Not Found: The requested resource could not be found.");
+                    },
+                    500: function () {
+                        toastr.error("Internal Server Error: Please try again later.");
+                    }
+                }
+            });
+        });
+    </script>
+
 </head>
 <body>
     <nav id="nav" class="navbar navbar-expand-lg navbar-dark bg-dark">
