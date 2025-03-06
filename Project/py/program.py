@@ -180,7 +180,7 @@ class wishGame(Resource):
         sqlProc='wishGame'
         user_id = session.get('user_id')
         print(user_id) #TODO remove
-        sqlArgs=[user_id,game_id,]
+        sqlArgs=[int(user_id),game_id,]
         try:
             rows,count=db_access(sqlProc,sqlArgs)
         except Exception as e:
