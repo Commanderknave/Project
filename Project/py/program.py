@@ -168,7 +168,7 @@ class details(Resource):
 class addGame(Resource):
     def get(self):
         return make_response(render_template('addGame.html'))
-api.add_resource(addGame, "game/addGame")
+api.add_resource(addGame, "/game/addGame")
 
 
 #endregion
