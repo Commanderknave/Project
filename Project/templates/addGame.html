@@ -32,11 +32,34 @@
                 toastr.error("Unable to extract game ID from the Steam URL");
                 return false;
             }
+            fetch(`https://store.steampowered.com/api/appdetails?appids=${game_id}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data[game_id].success) {
+                        const gameDetails = data[game_id].data;
+                        const gameInfo = {
+                            name: gameDetails.name,
+                            steam_appid: gameDetails.steam_appid,
+                            short_description: gameDetails.short_description,
+                            header_image: gameDetails.header_image,
+                            developers: gameDetails.developers,
+                            publishers: gameDetails.publishers,
+                            genres: gameDetails.genres.map(genre => genre.description),
+                            price: gameDetails.is_free ? 0 : gameDetails.price_overview.final_formatted
+                        };
+                        console.log(gameInfo);
+                    } else {
+                        toastr.error("Failed to retrieve game details from Steam API");
+                    }
+                })
+                .catch(error => {
+                    toastr.error("Error fetching game details: " + error.message);
+                });
             $.ajax({
                 type: "POST",
                 url: "https://" + window.location.hostname + ":8037/game/addGame",
                 contentType: "application/json",
-                data: JSON.stringify({ game_id: game_id }), // This is what you had it your yaml file, live with it lmao
+                data: JSON.stringify({gameInfo}), // This is what you had it your yaml file, live with it lmao
                 success: function (data) {
                     if (data.response && data.response === "Operation Successful") {
                         toastr.success("Game added successfully");
