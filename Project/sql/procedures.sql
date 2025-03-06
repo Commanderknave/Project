@@ -92,7 +92,7 @@ CREATE PROCEDURE addGame(
     IN developer VARCHAR(255),
     IN publisher VARCHAR(255),
     IN release_date DATE,
-    IN price DECIMAL(10,2) UNSIGNED,
+    IN price TEXT,
     IN game_description TEXT,
     IN thumbnail TEXT
 )
@@ -117,7 +117,7 @@ CREATE PROCEDURE wishGame(
     IN game_id INT
 )
 BEGIN
-	INSERT INTO wished_games VALUES (user_id,game_id);
+	INSERT INTO wished_games VALUES (user_id,game_id, False);
 END //
 
 DROP PROCEDURE IF EXISTS unwishGame //

@@ -4,6 +4,8 @@ from flask import Flask, request, make_response, jsonify, render_template
 from flask_restful import Resource, Api
 from flask_cors import CORS
 from flask_mail import Mail, Message
+import requests
+from datetime import datetime
 import hashlib
 import DB_CONFIG
 from DB_UTIL import db_access
@@ -168,7 +170,53 @@ class details(Resource):
 class addGame(Resource):
     def get(self):
         return make_response(render_template('addGame.html'))
+    def post(self):
+        rejectionReason=""
+
+        #Data
+        data=request.json
+        steamId=data['game_id']
+        response=requests.get(f'https://store.steampowered.com/api/appdetails?appids={steamId}')
+        
+        #Do not fucking ask stu, This shit not bussin
+        steam_data=response.json()[steamId]['data']
+        
+        #Game details parsing because CORS is a pain in my fucking ass
+        game_url='https://store.steampowered.com/app/'+str(steamId)
+        steamId=steamId
+        game_name=steam_data['name']
+        developer=steam_data['developers'][0]
+        publisher=steam_data['publishers'][0]
+        release_date="1969-12-31"
+        if not steam_data['release_date']['date']=="To be announced":
+            release_date_string=steam_data['release_date']['date']
+            date=datetime.strptime(release_date_string, "%d %b, %Y").strftime("%Y-%m-%d")
+            release_date=date
+        price=0
+        if not steam_data['is_free']:
+            #Ex: CDN$ 66.99-> 66.99
+            price_data=steam_data.get('price_overview',"N/A")
+            if not price_data=="N/A":
+                price_data=steam_data['price_overview']['final_formatted']
+                if not steam_data['price_overview']['initial_formatted']=="":
+                    price_data=steam_data['price_overview']['initial_formatted']
+            price=price_data
+            #TODO add a fucking price converter.
+        game_description=steam_data['short_description']
+        thumbnail=steam_data['header_image']
+
+        sqlProc='addGame'
+        sqlArgs=[game_url, steamId, game_name, developer, publisher, 
+                 release_date, price, game_description, thumbnail]
+
+        try:
+            rows,count=db_access(sqlProc, sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(addGame, "/game/addGame")
+
 
 
 #endregion
