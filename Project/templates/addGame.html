@@ -34,7 +34,7 @@
             }
             $.ajax({
                 type: "POST",
-                url: "https://" + window.location.hostname + ":8037/addGame",
+                url: "https://" + window.location.hostname + ":8037/game/addGame",
                 contentType: "application/json",
                 data: JSON.stringify({ game_id: game_id }), // This is what you had it your yaml file, live with it lmao
                 success: function (data) {
