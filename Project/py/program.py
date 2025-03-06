@@ -1,6 +1,5 @@
-#region User Management
 #!/usr/bin/env python3
-from flask import Flask, request, make_response, jsonify, render_template
+from flask import Flask, request, make_response, jsonify, render_template, session
 from flask_restful import Resource, Api
 from flask_cors import CORS
 from flask_mail import Mail, Message
@@ -13,6 +12,13 @@ from DB_UTIL import db_access
 app = Flask(__name__, template_folder="../templates")
 api = Api(app)
 CORS(app=app)
+
+# Configure server-side session
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_COOKIE_NAME'] = 'peanutButter'
+app.config['SESSION_COOKIE_DOMAIN'] = DB_CONFIG.APP_HOST
+app.secret_key = DB_CONFIG.SECRET_KEY
+Session(app)
 
 app.config['MAIL_SERVER']="smtp.unb.ca"
 app.config['MAIL_PORT']=25
@@ -156,6 +162,7 @@ class login(Resource):
             
         #There is a user and they're validated
         user=rows[0]
+        session['user_id'] = user['user_id']  # Set the user ID in the session
         response=make_response(jsonify({"response": "Operation Successful"}), 200)
         response.set_cookie("userId", value=str(user['user_id']))
         return response
@@ -166,6 +173,19 @@ class fetchRecentLogins(Resource):
 
 class details(Resource):
     pass
+
+class wishGame(Resource):
+    def get(self,game_id):
+        sqlProc='wishGame'
+        userid = session.get('user_id')
+        sqlArgs=[game_id,]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        return make_response(jsonify({"response": "Operation Successful"}), 200)
+api.add_resource(wishGame, "/wishGame<int:game_id>")
 
 class addGame(Resource):
     def get(self):
