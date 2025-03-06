@@ -239,6 +239,9 @@ class addGame(Resource):
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(addGame, "/game/addGame")
 
+class View(Resource):
+    def get(self):
+        return make_response(render_template('view.html'))
 
 
 #endregion
