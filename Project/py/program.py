@@ -3,6 +3,7 @@ from flask import Flask, request, make_response, jsonify, render_template, sessi
 from flask_restful import Resource, Api
 from flask_cors import CORS
 from flask_mail import Mail, Message
+from flask_session import Session
 import requests
 from datetime import datetime
 import hashlib
