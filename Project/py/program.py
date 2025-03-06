@@ -165,6 +165,12 @@ class fetchRecentLogins(Resource):
 class details(Resource):
     pass
 
+class addGame(Resource):
+    def get(self):
+        return make_response(render_template('addGame.html'))
+api.add_resource(addGame, "game/addGame")
+
+
 #endregion
 
 #region Application Management
