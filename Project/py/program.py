@@ -187,7 +187,7 @@ class wishGame(Resource):
             print(e)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         return make_response(jsonify({"response": "Operation Successful"}), 200)
-api.add_resource(wishGame, "/wishGame<int:game_id>")
+api.add_resource(wishGame, "game/wishGame/<int:game_id>")
 
 class addGame(Resource):
     def get(self):
