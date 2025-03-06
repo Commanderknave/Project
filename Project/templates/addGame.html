@@ -32,7 +32,7 @@
                 toastr.error("Unable to extract game ID from the Steam URL");
                 return false;
             }
-            fetch(`https://store.steampowered.com/api/appdetails?appids=${game_id}`)
+            fetch(`https://store.steampowered.com/api/appdetails?appids=${game_id}`, { mode: 'no-cors' })
                 .then(response => response.json())
                 .then(data => {
                     if (data[game_id].success) {
