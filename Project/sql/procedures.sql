@@ -117,7 +117,7 @@ CREATE PROCEDURE wishGame(
     IN game_id INT
 )
 BEGIN
-	INSERT INTO wished_games VALUES (user_id,game_id, False);
+	INSERT INTO wished_games (user_id, game_id, purchased) VALUES (user_id,game_id, False);
 END //
 
 DROP PROCEDURE IF EXISTS unwishGame //
