@@ -122,11 +122,11 @@ END //
 
 DROP PROCEDURE IF EXISTS unwishGame //
 CREATE PROCEDURE unwishGame(
-	IN user_id INT,
-    IN game_id INT
+	IN user_id_in INT,
+    IN game_id_in INT
 )
 BEGIN
-	DELETE FROM wished_games where user_id=user_id AND game_id=game_id;
+	DELETE FROM wished_games where user_id=user_id_in AND game_id=game_id_in;
 END //
 
 DROP PROCEDURE IF EXISTS fetchUserWishlist //
