@@ -279,7 +279,12 @@ api.add_resource(WishGame, "/game/wishGame/<int:game_id>")
 class UnwishGame(Resource):
     def get(self,game_id):
         user_id = session.get('user_id')
-
+        
+        #External user attempting to affect another
+        affectedUser=request.base_url.split('unwishGame/')[1]
+        if not int(user_id)==int(affectedUser):
+            return make_response(jsonify({"response": "You cannot edit another's wishlist"}), 403)
+        
         #Verify game exists
         sqlProc='fetchGame'
         sqlArgs=[game_id,]
@@ -290,16 +295,36 @@ class UnwishGame(Resource):
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         if count!=1:
             return make_response(jsonify({"response": "Game Not Found"}), 404)
-
-        #unwishGame from user
-        sqlProc='unwishGame'
-        sqlArgs=[int(user_id),game_id,]
+        
+        #Get user's wishlist
+        sqlProc='fetchUserWishlist'
+        sqlArgs=[int(user_id),]
         try:
             rows,count=db_access(sqlProc,sqlArgs)
         except Exception as e:
             print(e)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
-        return make_response(jsonify({"response": "Operation Successful"}), 200)
+
+        #Look for the game
+        for game in rows:
+            #Found game
+            if game['game_id']==game_id:
+                #If purchased do not allow removal
+                if game['purchased']==1:
+                    return make_response(jsonify({"response": "Game is purchased"}), 409)
+
+                #Unwish game from user
+                sqlProc='unwishGame'
+                sqlArgs=[int(user_id),game_id,]
+                try:
+                    rows,count=db_access(sqlProc,sqlArgs)
+                except Exception as e:
+                    print(e)
+                    return make_response(jsonify({"response": "Internal Server Error"}), 500)
+                #We could send an email notifying of someone purchasing the game for the user
+                return make_response(jsonify({"response": "Operation Successful"}), 200)
+
+        return make_response(jsonify({"response": "You somehow ran out of games to check whilst getting none removed"}), 500)
 api.add_resource(UnwishGame, "/game/unwishGame/<int:game_id>")
 
 class WishList(Resource):
@@ -375,6 +400,8 @@ class PurchaseGame(Resource):
         #The user had no such game wished
         return make_response(jsonify({"response": "Game Was Not Wished By User"}), 404)
 api.add_resource(PurchaseGame, "/game/purchaseGame/<int:user_id>/<int:game_id>")
+
+#endregion
 
 #region Stuff lmao
 

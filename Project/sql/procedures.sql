@@ -139,11 +139,11 @@ END //
 
 DROP PROCEDURE IF EXISTS purchaseGame //
 CREATE PROCEDURE purchaseGame(
-	IN user_id INT,
-    IN game_id INT
+	IN user_id_in INT,
+    IN game_id_in INT
 )
 BEGIN
-	UPDATE wished_games SET purchased=TRUE WHERE user_id=user_id AND game_id=game_id;
+	UPDATE wished_games SET purchased=TRUE WHERE user_id=user_id_in AND game_id=game_id_in;
 END //
 
 DELIMITER ;
