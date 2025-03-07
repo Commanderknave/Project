@@ -277,14 +277,14 @@ class WishGame(Resource):
 api.add_resource(WishGame, "/game/wishGame/<int:game_id>")
 
 class UnwishGame(Resource):
-    def get(self,game_id):
+    def delete(self,game_id):
         user_id = session.get('user_id')
-        
-        #External user attempting to affect another
-        affectedUser=request.base_url.split('unwishGame/')[1]
+
+        # #External user attempting to affect another
+        affectedUser=request.json['user_id']
         if not int(user_id)==int(affectedUser):
             return make_response(jsonify({"response": "You cannot edit another's wishlist"}), 403)
-        
+
         #Verify game exists
         sqlProc='fetchGame'
         sqlArgs=[game_id,]
@@ -295,7 +295,7 @@ class UnwishGame(Resource):
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         if count!=1:
             return make_response(jsonify({"response": "Game Not Found"}), 404)
-        
+
         #Get user's wishlist
         sqlProc='fetchUserWishlist'
         sqlArgs=[int(user_id),]
