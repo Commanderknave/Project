@@ -23,6 +23,11 @@
         //none, for now...
     </script>
 
+    <script type="text/javascript">
+        obj = `{{value}}`;
+        data = JSON.parse(obj.replaceAll('&#34;', '"').replaceAll('\n', ''))['response'];
+    </script>
+
 </head>
 
 <body>

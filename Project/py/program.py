@@ -4,6 +4,7 @@ from flask_restful import Resource, Api
 from flask_cors import CORS
 from flask_mail import Mail, Message
 from flask_session import Session
+import json
 import requests
 from datetime import datetime
 import hashlib
@@ -108,20 +109,6 @@ class Validate(Resource):
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(Validate, "/validate/<string:email_hash>")
 
-class fetchUser(Resource):
-    def get(self,user_id):
-        sqlProc='fetchUser'
-        sqlArgs = [user_id,]
-        try:
-            rows,count = db_access(sqlProc,sqlArgs)
-        except Exception as e:
-            print(e)
-            return make_response(jsonify({"response": "Internal Server Error"}), 500)
-        if count !=1:
-            return make_response(jsonify({"response": "User Not Found"}), 404)
-        return make_response(jsonify({"response": rows[0]}), 200)
-api.add_resource(fetchUser, "/fetchUser/<int:user_id>")
-
 class login(Resource):
     def get(self):
         return make_response(render_template('login.html'))
@@ -177,9 +164,37 @@ class details(Resource):
 
 class wishGame(Resource):
     def get(self,game_id):
-        sqlProc='wishGame'
         user_id = session.get('user_id')
-        print(user_id) #TODO remove
+
+        sqlProc='fetchGame'
+        sqlArgs=[game_id,]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        if count!=1:
+            return make_response(jsonify({"response": "Game Not Found"}), 404)
+
+        sqlProc='fetchUserWishlist'
+        sqlArgs=[int(user_id),]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+
+        #User has no wished game
+        if count==0:
+            return make_response(jsonify({"response": "No wished games in wishlist"}), 404)
+        
+        #User has game(s) in the wishlist
+        for game in rows:
+            if game['game_id']==game_id:
+                return make_response(jsonify({"response": "Game Already Wished"}), 304)
+
+        # Game is not wished
+        sqlProc='wishGame'
         sqlArgs=[int(user_id),game_id,]
         try:
             rows,count=db_access(sqlProc,sqlArgs)
@@ -188,6 +203,19 @@ class wishGame(Resource):
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(wishGame, "/game/wishGame/<int:game_id>")
+
+class unwishGame(Resource):
+    def get(self,game_id):
+        sqlProc='unwishGame'
+        user_id = session.get('user_id')
+        sqlArgs=[int(user_id),game_id,]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        return make_response(jsonify({"response": "Operation Successful"}), 200)
+    
 
 class addGame(Resource):
     def get(self):
@@ -239,9 +267,22 @@ class addGame(Resource):
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(addGame, "/game/addGame")
 
-class View(Resource):
-    def get(self):
-        return make_response(render_template('view.html'))
+class fetchUser(Resource):
+    def get(self,user_id):
+        sqlProc='fetchUser'
+        sqlArgs=[user_id,]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        if count!=1:
+            return make_response(jsonify({"response": "User Not Found"}), 404)
+        value=json.dumps({"response": rows[0]}, default=str, indent=4)
+        return make_response(render_template("view.html", value=value))
+api.add_resource(fetchUser, "/fetchUser/<int:user_id>")
+
+        # return make_response(render_template('view.html'))
 
 
 #endregion
