@@ -52,7 +52,7 @@
                 method: 'GET',
                 success: function (data) {
                     var wishlist = $('#wishlist');
-                    data.response.forEach(function (game) {
+                    data.wishlist.forEach(function (game) {
                         var listItem = `
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="d-flex flex-column">
