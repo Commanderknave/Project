@@ -83,14 +83,13 @@
 
     <!-- Doc.ready shenanigans -->
     <script type="text/javascript">
+        let url = window.location.href;
+        let parts = url.split('/');
+        var user_id = parts[parts.length - 1];
         $(document).ready(function () {
-            let url = window.location.href;
-            let parts = url.split('/');
-            user_id = parts[parts.length - 1];
             $.ajax({
                 url: "https://" + window.location.hostname + ":8037/game/list/" + user_id, // Replace with your API endpoint
-                method: 'DELETE',
-                data: JSON.stringify({ user_id: user_id }),
+                method: 'GET',
                 success: function (data) {
                     var wishlist = $('#wishlist');
                     data.wishlist.forEach(function (game) {
@@ -127,7 +126,8 @@
         function removeFromWishlist(game_id) {
             $.ajax({
                 url: "https://" + window.location.hostname + ":8037/game/unwishGame/" + game_id,
-                method: 'GET',
+                method: 'DELETE',
+                data: jsonify({ user_id: user_id }),
                 success: function (data) {
                     if (data.response && data.response === "Operation Successful") {
                         $('#game-' + game_id).remove();
