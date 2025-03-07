@@ -112,7 +112,7 @@
                                     </div>
                                 </div>
                             </li>
-                            <hr>
+                            <hr class="wishlist-divider">
                             `;
                         wishlist.append(listItem);
                     });
@@ -131,6 +131,7 @@
                 data: JSON.stringify({ user_id: user_id }),
                 success: function (data) {
                     if (data.response && data.response === "Operation Successful") {
+                        $('#game-' + game_id).next('.wishlist-divider').remove();
                         $('#game-' + game_id).remove();
                         toastr.success('Game removed from wishlist.');
                     } else {
@@ -180,6 +181,7 @@
             });
             $.each(items, function (index, item) {
                 wishlist.append(item);
+                wishlist.append($(item).next('.wishlist-divider'));
             });
         }
 
@@ -189,8 +191,10 @@
                 var purchased = $(this).data('purchased');
                 if (showPurchased) {
                     $(this).toggle(purchased === 1);
+                    $(this).next('.wishlist-divider').toggle(purchased === 1);
                 } else {
                     $(this).toggle(purchased === 0);
+                    $(this).next('.wishlist-divider').toggle(purchased === 0);
                 }
             });
         }
