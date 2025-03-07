@@ -27,7 +27,7 @@
                 url: "https://" + window.location.hostname + ":8037/logout",
                 success: function (data) {
                     if (data.response && data.response === "Operation Successful") {
-                        window.location.href = 'view';
+                        window.location.href = 'login';
                     } else {
                         toastr.error(data.response);
                     }
@@ -53,7 +53,7 @@
                 data: JSON.stringify({ username: username, user_password: password }),
                 success: function (data) {
                     if (data.response && data.response === "Operation Successful") {
-                        window.location.href = "view";
+                        window.location.href = "user/fetchUser/" + data.user_id;
                     } else {
                         alert("Invalid username or password");
                     }
