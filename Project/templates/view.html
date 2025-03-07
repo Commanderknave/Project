@@ -18,6 +18,14 @@
     <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/toastr.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css" rel="stylesheet">
 
+    <style>
+        .list-item-background {
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+    </style>
+
     <!-- Common scripts -->
     <script type="text/javascript">
         function logout() {
@@ -57,7 +65,7 @@
                         var purchaseButton = game.purchased === 1 ? '<button class="btn btn-secondary mt-2" disabled>Purchased</button>' : '<button class="btn btn-primary mt-2" onclick="purchaseGame(' + game.game_id + ')">Purchase</button>';
                         var listItemClass = game.purchased === 1 ? 'list-group-item-success' : '';
                         var listItem = `
-                            <li class="list-group-item d-flex justify-content-between align-items-center ${listItemClass}" id="game-${game.game_id}">
+                            <li class="list-group-item d-flex justify-content-between align-items-center ${listItemClass} list-item-background" id="game-${game.game_id}" style="background-image: url('${game.thumbnail}');">
                                 <div class="d-flex flex-column">
                                 <h5><a href="${game.url}" target="_blank">${game.game_name}</a></h5>
                                 <p><strong>Publisher:</strong> ${game.publisher}</p>
@@ -69,9 +77,6 @@
                                 ${purchaseButton}
                                 <button class="btn btn-danger mt-2 ms-2" onclick="removeFromWishlist(${game.game_id})">Remove from wishlist</button>
                                 </div>
-                                </div>
-                                <div class="d-flex flex-column align-items-end" style="background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);">
-                                <img src="${game.thumbnail}" alt="Game Thumbnail" class="img-thumbnail mb-2" style="width: 300px;">
                                 </div>
                             </li>
                             `;
@@ -163,3 +168,4 @@
         </ul>
     </div>
 </body>
+</html>
