@@ -44,8 +44,11 @@
     <!-- Doc.ready shenanigans -->
     <script type="text/javascript">
         $(document).ready(function () {
+            let url = window.location.href;
+            let parts = url.split('/');
+            user_id = parts[parts.length - 1];
             $.ajax({
-                url: "https://" + window.location.hostname + ":8037/", // Replace with your API endpoint
+                url: "https://" + window.location.hostname + ":8037/game/list/" + user_id, // Replace with your API endpoint
                 method: 'GET',
                 success: function (data) {
                     var wishlist = $('#wishlist');
