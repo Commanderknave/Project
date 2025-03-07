@@ -86,6 +86,8 @@
         let url = window.location.href;
         let parts = url.split('/');
         var user_id = parts[parts.length - 1];
+        var originalOrder = [];
+
         $(document).ready(function () {
             $.ajax({
                 url: "https://" + window.location.hostname + ":8037/game/list/" + user_id, // Replace with your API endpoint
@@ -115,6 +117,7 @@
                             <hr class="wishlist-divider">
                             `;
                         wishlist.append(listItem);
+                        originalOrder.push(listItem);
                     });
                 },
                 error: function (error) {
@@ -198,6 +201,15 @@
                 }
             });
         }
+
+        function resetSort() {
+            var wishlist = $('#wishlist');
+            wishlist.empty();
+            originalOrder.forEach(function (item) {
+                wishlist.append(item);
+                wishlist.append($(item).next('.wishlist-divider'));
+            });
+        }
     </script>
 
 </head>
@@ -238,16 +250,24 @@
         <div class="d-flex justify-content-between align-items-center mt-4">
             <h2>My Wishlist</h2>
             <div class="d-flex align-items-center">
-                <label for="sortPrice" class="me-2">Sort by Price:</label>
-                <select id="sortPrice" class="form-select me-2" onchange="sortWishlist('price', this.value === 'asc')">
-                    <option value="asc">Ascending</option>
-                    <option value="desc">Descending</option>
-                </select>
-                <label for="filterPurchased" class="me-2">Filter:</label>
-                <select id="filterPurchased" class="form-select" onchange="filterWishlist(this.value === 'purchased')">
-                    <option value="notPurchased">Show Not Purchased</option>
-                    <option value="purchased">Show Purchased</option>
-                </select>
+                <div class="dropdown me-2">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="sortPriceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sort by Price
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="sortPriceDropdown">
+                        <li><a class="dropdown-item" href="#" onclick="sortWishlist('price', true)">Ascending</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="sortWishlist('price', false)">Descending</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="filterPurchasedDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filter
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="filterPurchasedDropdown">
+                        <li><a class="dropdown-item" href="#" onclick="filterWishlist(false)">Show Not Purchased</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="filterWishlist(true)">Show Purchased</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
         <ul class="list-group" id="wishlist">
