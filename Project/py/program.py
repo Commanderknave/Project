@@ -152,9 +152,7 @@ class Login(Resource):
         #There is a user and they're validated
         user=rows[0]
         session['user_id'] = user['user_id']  # Set the user ID in the session
-        response=make_response(jsonify({"response": "Operation Successful"}), 200)
-        response.set_cookie("userId", value=str(user['user_id']))
-        return response
+        return make_response(jsonify({"response": "Operation Successful", "user_id": user['user_id']}), 200)
 api.add_resource(Login, "/login")
 
 class Logout(Resource):
