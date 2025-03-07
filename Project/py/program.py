@@ -326,11 +326,6 @@ class WishList(Resource):
         return make_response(jsonify({"response": "Operation Successful", "wishlist": rows}) ,200)
 api.add_resource(WishList, "/game/list/<int:user_id>")
 
-class Support(Resource):
-    def get(self):
-        return make_response(render_template('support.html'))
-api.add_resource(Support, "/support")
-
 class PurchaseGame(Resource):
     def post(self,user_id,game_id):
         #Check if user exists
@@ -381,6 +376,14 @@ class PurchaseGame(Resource):
         return make_response(jsonify({"response": "Game Was Not Wished By User"}), 404)
 api.add_resource(PurchaseGame, "/game/purchaseGame/<int:user_id>/<int:game_id>")
 
+#region Stuff lmao
+
+class Support(Resource):
+    def get(self):
+        return make_response(render_template('support.html'))
+api.add_resource(Support, "/support")
+
+
 class Profile(Resource):
     def get(self):
         #sqlProc = ''
@@ -389,6 +392,8 @@ class Profile(Resource):
         result="You are at your profile"
         return make_response(jsonify({"profile": result}), 200)
 api.add_resource(Profile, "/")
+
+#endregion
 
 if __name__ == "__main__":
     context = ('cert.pem', 'key.pem')
