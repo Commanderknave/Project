@@ -296,11 +296,6 @@ class fetchUser(Resource):
         return make_response(render_template("view.html", value=value))
 api.add_resource(fetchUser, "/user/fetchUser/<int:user_id>")
 
-#endregion
-
-#region Application Management
-#endregion
-
 class Profile(Resource):
     def get(self):
         #sqlProc = ''
