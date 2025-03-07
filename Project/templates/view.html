@@ -48,13 +48,14 @@
             let parts = url.split('/');
             user_id = parts[parts.length - 1];
             $.ajax({
-                url: "https://" + window.location.hostname + ":8037/game/list/" + user_id, // Replace with your API endpoint
-                method: 'GET',
-                success: function (data) {
-                    var wishlist = $('#wishlist');
-                    data.wishlist.forEach(function (game) {
-                        var listItem = `
-                <li class="list-group-item d-flex justify-content-between align-items-center" id="game-${game.game_id}">
+            url: "https://" + window.location.hostname + ":8037/game/list/" + user_id, // Replace with your API endpoint
+            method: 'GET',
+            success: function (data) {
+                var wishlist = $('#wishlist');
+                data.wishlist.forEach(function (game) {
+                var purchasedText = game.purchased === 1 ? 'Purchased' : 'Not Purchased';
+                var listItem = `
+                    <li class="list-group-item d-flex justify-content-between align-items-center" id="game-${game.game_id}">
                     <div class="d-flex flex-column">
                         <h5><a href="${game.url}" target="_blank">${game.game_name}</a></h5>
                         <p><strong>Publisher:</strong> ${game.publisher}</p>
@@ -62,19 +63,20 @@
                         <p><strong>Price:</strong> $${game.price}</p>
                         <p><strong>Description:</strong> ${game.game_description}</p>
                         <p><strong>Release Date:</strong> ${new Date(game.release_date).toLocaleDateString()}</p>
+                        <p><strong>Status:</strong> ${purchasedText}</p>
+                        <button class="btn btn-danger mt-2" onclick="removeFromWishlist(${game.game_id})">Remove from wishlist</button>
                     </div>
-                    <div class="d-flex flex-column align-items-center">
-                        <img src="${game.thumbnail}" alt="Game Thumbnail" class="img-thumbnail mb-2" style="width: 200px;">
-                        <button class="btn btn-danger" onclick="removeFromWishlist(${game.game_id})">Remove from wishlist</button>
+                    <div class="d-flex flex-column align-items-end">
+                        <img src="${game.thumbnail}" alt="Game Thumbnail" class="img-thumbnail mb-2" style="width: 300px;">
                     </div>
-                </li>
+                    </li>
                 `;
-                        wishlist.append(listItem);
-                    });
-                },
-                error: function (error) {
-                    toastr.error('Failed to load wishlist, if this issue persists, please contact an administrator.');
-                }
+                wishlist.append(listItem);
+                });
+            },
+            error: function (error) {
+                toastr.error('Failed to load wishlist, if this issue persists, please contact an administrator.');
+            }
             });
         });
 
