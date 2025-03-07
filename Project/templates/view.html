@@ -65,7 +65,6 @@
                 <p><strong>Price:</strong> $${game.price}</p>
                 <p><strong>Description:</strong> ${game.game_description}</p>
                 <p><strong>Release Date:</strong> ${new Date(game.release_date).toLocaleDateString()}</p>
-                <p><strong>Status:</strong> ${purchasedText}</p>
                 <div class="d-flex">
                 ${purchaseButton}
                 <button class="btn btn-danger mt-2 ms-2" onclick="removeFromWishlist(${game.game_id})">Remove from wishlist</button>
