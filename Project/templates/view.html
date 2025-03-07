@@ -45,7 +45,6 @@
                     <p><strong>Developers:</strong> ${game.developers}</p>
                     <p><strong>Price:</strong> ${game.price}</p>
                     <p><strong>Description:</strong> ${game.description}</p>
-                    <p><strong>Genres:</strong> ${game.genres.join(', ')}</p>
                     <p><strong>Release Date:</strong> ${game.releaseDate}</p>
                     </div>
                     <img src="${game.thumbnail}" alt="Game Thumbnail" class="img-thumbnail" style="width: 100px;">
@@ -55,6 +54,10 @@
                         wishlist.append(listItem);
                     });
                 },
+                
+                // Stuff that may be added later
+                // <p><strong>Genres:</strong> ${game.genres.join(', ')}</p>
+
                 error: function (error) {
                     toastr.error('Failed to load wishlist, if this issue persists, please contact an administrator.');
                 }
