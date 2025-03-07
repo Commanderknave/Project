@@ -27,7 +27,7 @@
                 url: "https://" + window.location.hostname + ":8037/logout",
                 success: function (data) {
                     if (data.response && data.response === "Operation Successful") {
-                        window.location.href = 'login';
+                        window.location.href = 'view';
                     } else {
                         toastr.error(data.response);
                     }
