@@ -27,6 +27,9 @@
             color: white;
             position: relative;
             overflow: hidden;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            filter: blur(2px);
         }
 
         .list-item-background::before {
@@ -96,7 +99,7 @@
                         var purchaseButton = game.purchased === 1 ? '<button class="btn btn-secondary mt-2" disabled>Purchased</button>' : '<button class="btn btn-primary mt-2" onclick="purchaseGame(' + game.game_id + ')">Purchase</button>';
                         var listItemClass = game.purchased === 1 ? 'list-group-item-success' : '';
                         var listItem = `
-                            <li class="list-group-item d-flex justify-content-between align-items-center ${listItemClass} list-item-background" id="game-${game.game_id}" style="background-image: url('${game.thumbnail}');">
+                            <li class="list-group-item d-flex justify-content-between align-items-center ${listItemClass} list-item-background border-0" id="game-${game.game_id}" style="background-image: url('${game.thumbnail}');">
                                 <div class="list-item-content">
                                     <h5><a href="${game.url}" target="_blank">${game.game_name}</a></h5>
                                     <p><strong>Publisher:</strong> ${game.publisher}</p>
@@ -110,6 +113,7 @@
                                     </div>
                                 </div>
                             </li>
+                            <hr>
                             `;
                         wishlist.append(listItem);
                     });
@@ -192,7 +196,7 @@
             </div>
         </div>
     </nav>
-    <div class="container">
+    <div class="container"></div>
         <h2 class="mt-4">My Wishlist</h2>
         <ul class="list-group" id="wishlist">
             <!-- List items will be dynamically generated here -->
