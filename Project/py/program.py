@@ -148,7 +148,7 @@ class Login(Resource):
             rejectionReason+="Credentials may be invalid or this user is not yet validated"
             return make_response(
                 jsonify({"response": "User Not Found", "reason": rejectionReason}), 404)
-            
+
         #There is a user and they're validated
         user=rows[0]
         session['user_id'] = user['user_id']  # Set the user ID in the session
@@ -156,6 +156,14 @@ class Login(Resource):
         response.set_cookie("userId", value=str(user['user_id']))
         return response
 api.add_resource(Login, "/login")
+
+class Logout(Resource):
+    def get(self):
+        if not 'user_id' in session:
+            return make_response(jsonify({"response": "User is not logged in"}), 404)
+        session.pop('user_id')
+        return make_response(jsonify({"response": "Operation Successful"}), 200)
+api.add_resource(Logout, "/logout")
 
 class fetchRecentLogins(Resource):
     pass
@@ -309,7 +317,7 @@ class WishList(Resource):
         if count!=1:
             return make_response(jsonify({"response": "User Not Found"}), 404)
 
-
+        #Get wishlist
         sqlProc='fetchUserWishlist'
         sqlArgs=[user_id,]
         try:
