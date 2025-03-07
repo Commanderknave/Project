@@ -27,9 +27,6 @@
             color: white;
             position: relative;
             overflow: hidden;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            filter: blur(2px);
         }
 
         .list-item-background::before {
@@ -39,8 +36,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to left, rgb(0 0 0 / 50%) 0%, rgb(0 0 0) 100%);
+            background: linear-gradient(to left, rgb(0 0 0 / 70%) 0%, rgb(0 0 0) 100%);
             z-index: 1;
+            backdrop-filter: blur(5px);
         }
 
         .list-item-content {
@@ -113,7 +111,6 @@
                                     </div>
                                 </div>
                             </li>
-                            <hr>
                             `;
                         wishlist.append(listItem);
                     });
@@ -196,7 +193,7 @@
             </div>
         </div>
     </nav>
-    <div class="container"></div>
+    <div class="container">
         <h2 class="mt-4">My Wishlist</h2>
         <ul class="list-group" id="wishlist">
             <!-- List items will be dynamically generated here -->
