@@ -131,10 +131,10 @@ END //
 
 DROP PROCEDURE IF EXISTS fetchUserWishlist //
 CREATE PROCEDURE fetchUserWishlist(
-	IN user_id INT
+	IN user_id_in INT
 )
 BEGIN
-	SELECT * FROM wished_games WHERE user_id=user_id;
+	SELECT games.* FROM games INNER JOIN wished_games ON games.game_id=wished_games.game_id WHERE user_id=user_id_in;
 END //
 
 DROP PROCEDURE IF EXISTS purchaseGame //
