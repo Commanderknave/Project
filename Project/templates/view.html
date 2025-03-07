@@ -127,6 +127,7 @@
             $.ajax({
                 url: "https://" + window.location.hostname + ":8037/game/unwishGame/" + game_id,
                 method: 'DELETE',
+                contentType: "application/json",
                 data: JSON.stringify({ user_id: user_id }),
                 success: function (data) {
                     if (data.response && data.response === "Operation Successful") {
