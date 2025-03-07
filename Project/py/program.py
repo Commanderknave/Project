@@ -378,6 +378,11 @@ api.add_resource(PurchaseGame, "/game/purchaseGame/<int:user_id>/<int:game_id>")
 
 #endregion
 
+class Support(Resource):
+    def get(self):
+        return make_response(render_template('support.html'))
+api.add_resource(Support, "/support")
+
 class Profile(Resource):
     def get(self):
         #sqlProc = ''
