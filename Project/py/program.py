@@ -280,9 +280,21 @@ class addGame(Resource):
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(addGame, "/game/addGame")
 
-class View(Resource):
-    def get(self):
-        return make_response(render_template('view.html'))
+class fetchUser(Resource):
+    def get(self,user_id):
+        sqlProc='fetchUser'
+        sqlArgs=[user_id,]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        if count!=1:
+            return make_response(jsonify({"response": "User Not Found"}), 404)
+        return make_response(render_template('view.html'),jsonify({"response": rows[0]}), 200)
+api.add_resource(fetchUser, "/fetchUser/<int:user_id>")
+
+        # return make_response(render_template('view.html'))
 
 
 #endregion
