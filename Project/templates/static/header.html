@@ -40,28 +40,23 @@ function searchUser(username) {
     });
 }
 
-$("#searchUserForm").submit(function(event) {
-    event.preventDefault();
-    var username = $("#username").val();
-    searchUser(username);
-});
-
-    function logout() {
-        // Add your logout logic here
-        $.ajax({
-            type: "GET",
-            url: "https://" + window.location.hostname + ":8037/logout",
-            success: function (data) {
-                if (data.response && data.response === "Operation Successful") {
-                    window.location.href = 'login';
-                } else {
-                    toastr.error(data.response);
-                }
+function logout() {
+    // Add your logout logic here
+    $.ajax({
+        type: "GET",
+        url: "https://" + window.location.hostname + ":8037/logout",
+        success: function (data) {
+            if (data.response && data.response === "Operation Successful") {
+                window.location.href = 'login';
+            } else {
+                toastr.error(data.response);
             }
-        });
-    }
+        }
+    });
+}
 </script>
 
+<!-- Search User Button -->
 <!--
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
