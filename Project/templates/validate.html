@@ -1,5 +1,8 @@
 <html>
 <head>
+    <title>Email Validation</title>
+
+    <!-- Ajax -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <!-- bootstrap -->
@@ -16,7 +19,20 @@
 
     <!-- Common scripts -->
     <script type="text/javascript">
-        //none, for now...
+        function logout() {
+            // Add your logout logic here
+            $.ajax({
+                type: "GET",
+                url: "https://" + window.location.hostname + ":8037/logout",
+                success: function (data) {
+                    if (data.response && data.response === "Operation Successful") {
+                        window.location.href = 'login';
+                    } else {
+                        toastr.error(data.response);
+                    }
+                }
+            });
+        }
     </script>
 
     <!-- Get request to validate email -->

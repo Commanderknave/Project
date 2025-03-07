@@ -1,6 +1,10 @@
 <html>
 
 <head>
+
+    <title>Add Game</title>
+
+    <!-- Ajax -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <!-- bootstrap -->
@@ -14,6 +18,24 @@
     <!-- Toastr.js -->
     <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/toastr.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css" rel="stylesheet">
+
+    <!-- Common scripts -->
+    <script type="text/javascript">
+        function logout() {
+            // Add your logout logic here
+            $.ajax({
+                type: "GET",
+                url: "https://" + window.location.hostname + ":8037/logout",
+                success: function (data) {
+                    if (data.response && data.response === "Operation Successful") {
+                        window.location.href = 'login';
+                    } else {
+                        toastr.error(data.response);
+                    }
+                }
+            });
+        }
+    </script>
 
     <script type="text/javascript">
         function validateForm() {
