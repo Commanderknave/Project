@@ -4,6 +4,7 @@ from flask_restful import Resource, Api
 from flask_cors import CORS
 from flask_mail import Mail, Message
 from flask_session import Session
+import json
 import requests
 from datetime import datetime
 import hashlib
@@ -277,7 +278,8 @@ class fetchUser(Resource):
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         if count!=1:
             return make_response(jsonify({"response": "User Not Found"}), 404)
-        return make_response(render_template("view.html"), value=jsonify({"response": rows[0]}))
+        value=json.dumps(jsonify({"response": rows[0]}))
+        return make_response(render_template("view.html", value))
 api.add_resource(fetchUser, "/fetchUser/<int:user_id>")
 
         # return make_response(render_template('view.html'))
