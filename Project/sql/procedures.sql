@@ -58,14 +58,8 @@ BEGIN
             AND verified_emails.verification_time !=FROM_UNIXTIME(1);
 	IF (FOUND_ROWS()=1) THEN
 		UPDATE users SET last_login=NOW() WHERE username=username_in;
-        SELECT * FROM users where username=username_in;
+        SELECT user_id FROM users where username=username_in;
 	END IF;
-END //
-
-DROP PROCEDURE IF EXISTS fetchRecentLogins //
-CREATE PROCEDURE fetchRecentLogins()
-BEGIN
-	SELECT * FROM users ORDER BY last_login DESC LIMIT 10;
 END //
 
 DROP PROCEDURE IF EXISTS fetchUser //
@@ -73,7 +67,8 @@ CREATE PROCEDURE fetchUser(
 	IN id INT
 )
 BEGIN
-	SELECT * FROM users WHERE user_id=id;
+	SELECT user_id, username, creation_date, last_login
+		FROM users WHERE user_id=id;
 END //
 
 DROP PROCEDURE IF EXISTS fetchUserByName //
@@ -81,7 +76,8 @@ CREATE PROCEDURE fetchUserByName(
 	IN username_in VARCHAR(30)
 )
 BEGIN
-	SELECT * FROM users WHERE username=username_in;
+	SELECT user_id, username, creation_date, last_login
+		FROM users WHERE username LIKE CONCAT('%',username_in,'%');
 END //
 
 DROP PROCEDURE IF EXISTS addGame //

@@ -163,9 +163,6 @@ class Logout(Resource):
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(Logout, "/logout")
 
-class fetchRecentLogins(Resource):
-    pass
-
 class FetchUser(Resource):
     def get(self,user_id):
         sqlProc='fetchUser'
@@ -180,6 +177,20 @@ class FetchUser(Resource):
         value=json.dumps({"response": rows[0]}, default=str, indent=4)
         return make_response(render_template("view.html", value=value))
 api.add_resource(FetchUser, "/user/fetchUser/<int:user_id>")
+
+class FetchUserByName(Resource):
+    def get(self,username):
+        sqlProc='fetchUserByName'
+        sqlArgs=[username,]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        if count==0:
+            return make_response(jsonify({"response": "No Such User(s)"}), 404)
+        return make_response(jsonify({"response": "Operation Successful", "users": rows}), 200)
+api.add_resource(FetchUserByName, "/user/fetchUserByName/<string:username>")
 
 class details(Resource):
     pass
