@@ -23,6 +23,24 @@
             background-size: cover;
             background-position: center;
             color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .list-item-background::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+            z-index: 1;
+        }
+
+        .list-item-content {
+            position: relative;
+            z-index: 2;
         }
     </style>
 
@@ -66,17 +84,17 @@
                         var listItemClass = game.purchased === 1 ? 'list-group-item-success' : '';
                         var listItem = `
                             <li class="list-group-item d-flex justify-content-between align-items-center ${listItemClass} list-item-background" id="game-${game.game_id}" style="background-image: url('${game.thumbnail}');">
-                                <div class="d-flex flex-column">
-                                <h5><a href="${game.url}" target="_blank">${game.game_name}</a></h5>
-                                <p><strong>Publisher:</strong> ${game.publisher}</p>
-                                <p><strong>Developer:</strong> ${game.developer}</p>
-                                <p><strong>Price:</strong> $${game.price}</p>
-                                <p><strong>Description:</strong> ${game.game_description}</p>
-                                <p><strong>Release Date:</strong> ${new Date(game.release_date).toLocaleDateString()}</p>
-                                <div class="d-flex">
-                                ${purchaseButton}
-                                <button class="btn btn-danger mt-2 ms-2" onclick="removeFromWishlist(${game.game_id})">Remove from wishlist</button>
-                                </div>
+                                <div class="list-item-content">
+                                    <h5><a href="${game.url}" target="_blank">${game.game_name}</a></h5>
+                                    <p><strong>Publisher:</strong> ${game.publisher}</p>
+                                    <p><strong>Developer:</strong> ${game.developer}</p>
+                                    <p><strong>Price:</strong> $${game.price}</p>
+                                    <p><strong>Description:</strong> ${game.game_description}</p>
+                                    <p><strong>Release Date:</strong> ${new Date(game.release_date).toLocaleDateString()}</p>
+                                    <div class="d-flex">
+                                        ${purchaseButton}
+                                        <button class="btn btn-danger mt-2 ms-2" onclick="removeFromWishlist(${game.game_id})">Remove from wishlist</button>
+                                    </div>
                                 </div>
                             </li>
                             `;
