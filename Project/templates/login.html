@@ -20,7 +20,20 @@
 
     <!-- Common scripts -->
     <script type="text/javascript">
-        //none, for now...
+        function logout() {
+            // Add your logout logic here
+            $.ajax({
+                type: "GET",
+                url: "https://" + window.location.hostname + ":8037/logout",
+                success: function (data) {
+                    if (data.response && data.response === "Operation Successful") {
+                        window.location.href = 'login';
+                    } else {
+                        toastr.error(data.response);
+                    }
+                }
+            });
+        }
     </script>
 
     <!-- Main scripts -->
@@ -73,7 +86,7 @@
                             Account
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="logout">Logout</a>
+                            <a class="dropdown-item" href="#" onclick="logout()">Logout</a>
                             <a class="dropdown-item" href="view">My Wishlist</a>
                             <a class="dropdown-item" href="friends">Friends</a>
                         </div>

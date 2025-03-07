@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Login</title>
+    <title>My Wishlist</title>
 
     <!-- Ajax -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -20,12 +20,62 @@
 
     <!-- Common scripts -->
     <script type="text/javascript">
-        //none, for now...
+        function logout() {
+            // Add your logout logic here
+            $.ajax({
+                type: "GET",
+                url: "https://" + window.location.hostname + ":8037/logout",
+                success: function (data) {
+                    if (data.response && data.response === "Operation Successful") {
+                        window.location.href = 'login';
+                    } else {
+                        toastr.error(data.response);
+                    }
+                }
+            });
+        }
     </script>
 
     <script type="text/javascript">
         obj = `{{value}}`;
         data = JSON.parse(obj.replaceAll('&#34;', '"').replaceAll('\n', ''))['response'];
+    </script>
+
+    <!-- Doc.ready shenanigans -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                url: "https://" + window.location.hostname + ":8037/", // Replace with your API endpoint
+                method: 'GET',
+                success: function (data) {
+                    var wishlist = $('#wishlist');
+                    data.response.forEach(function (game) {
+                        var listItem = `
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                    <h5>${game.name}</h5>
+                    <p><strong>Publisher:</strong> ${game.publisher}</p>
+                    <p><strong>Developers:</strong> ${game.developers}</p>
+                    <p><strong>Price:</strong> ${game.price}</p>
+                    <p><strong>Description:</strong> ${game.description}</p>
+                    <p><strong>Release Date:</strong> ${game.releaseDate}</p>
+                    </div>
+                    <img src="${game.thumbnail}" alt="Game Thumbnail" class="img-thumbnail" style="width: 100px;">
+                    <span class="badge bg-primary rounded-pill">Wishlist</span>
+                </li>
+                `;
+                        wishlist.append(listItem);
+                    });
+                },
+
+                // Stuff that may be added later
+                // <p><strong>Genres:</strong> ${game.genres.join(', ')}</p>
+
+                error: function (error) {
+                    toastr.error('Failed to load wishlist, if this issue persists, please contact an administrator.');
+                }
+            });
+        });
     </script>
 
 </head>
@@ -53,7 +103,7 @@
                             Account
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="logout">Logout</a>
+                            <a class="dropdown-item" href="#" onclick="logout()">Logout</a>
                             <a class="dropdown-item" href="view">My Wishlist</a>
                             <a class="dropdown-item" href="friends">Friends</a>
                         </div>
@@ -67,52 +117,5 @@
         <ul class="list-group" id="wishlist">
             <!-- List items will be dynamically generated here -->
         </ul>
-
-        <script type="text/javascript">
-
-
-            $(document).ready(function() {
-
-
-
-
-            // $.ajax({
-            //     url: window.location.href, // Replace with your API endpoint
-            //     method: 'GET',
-            //     success: function(data) {
-                    
-            //     }
-            // })
-
-            // $.ajax({
-            //     url: window.location.href, // Replace with your API endpoint
-            //     method: 'GET',
-            //     success: function(data) {
-            //     var wishlist = $('#wishlist');
-            //     data.forEach(function(game) {
-            //         var listItem = `
-            //         <li class="list-group-item d-flex justify-content-between align-items-center">
-            //             <div>
-            //             <h5>${game.name}</h5>
-            //             <p><strong>Publisher:</strong> ${game.publisher}</p>
-            //             <p><strong>Developers:</strong> ${game.developers}</p>
-            //             <p><strong>Price:</strong> ${game.price}</p>
-            //             <p><strong>Description:</strong> ${game.description}</p>
-            //             <p><strong>Genres:</strong> ${game.genres.join(', ')}</p>
-            //             <p><strong>Release Date:</strong> ${game.releaseDate}</p>
-            //             </div>
-            //             <img src="${game.thumbnail}" alt="Game Thumbnail" class="img-thumbnail" style="width: 100px;">
-            //             <span class="badge bg-primary rounded-pill">Wishlist</span>
-            //         </li>
-            //         `;
-            //         wishlist.append(listItem);
-            //     });
-            //     },
-            //     error: function(error) {
-            //     toastr.error('Failed to load wishlist, if this issue persists, please contact an administrator.');
-            //     }
-            // });
-            });
-        </script>
     </div>
 </body>
