@@ -89,7 +89,8 @@
             user_id = parts[parts.length - 1];
             $.ajax({
                 url: "https://" + window.location.hostname + ":8037/game/list/" + user_id, // Replace with your API endpoint
-                method: 'GET',
+                method: 'DELETE',
+                data: JSON.stringify({ user_id: user_id }),
                 success: function (data) {
                     var wishlist = $('#wishlist');
                     data.wishlist.forEach(function (game) {
