@@ -52,25 +52,23 @@
                     data.response.forEach(function (game) {
                         var listItem = `
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                    <h5>${game.name}</h5>
-                    <p><strong>Publisher:</strong> ${game.publisher}</p>
-                    <p><strong>Developers:</strong> ${game.developers}</p>
-                    <p><strong>Price:</strong> ${game.price}</p>
-                    <p><strong>Description:</strong> ${game.description}</p>
-                    <p><strong>Release Date:</strong> ${game.releaseDate}</p>
+                    <div class="d-flex flex-column">
+                        <h5><a href="${game.url}" target="_blank">${game.game_name}</a></h5>
+                        <p><strong>Publisher:</strong> ${game.publisher}</p>
+                        <p><strong>Developer:</strong> ${game.developer}</p>
+                        <p><strong>Price:</strong> $${game.price}</p>
+                        <p><strong>Description:</strong> ${game.game_description}</p>
+                        <p><strong>Release Date:</strong> ${new Date(game.release_date).toLocaleDateString()}</p>
                     </div>
-                    <img src="${game.thumbnail}" alt="Game Thumbnail" class="img-thumbnail" style="width: 100px;">
-                    <span class="badge bg-primary rounded-pill">Wishlist</span>
+                    <div class="d-flex flex-column align-items-center">
+                        <img src="${game.thumbnail}" alt="Game Thumbnail" class="img-thumbnail mb-2" style="width: 150px;">
+                        <span class="badge bg-primary rounded-pill">Wishlist</span>
+                    </div>
                 </li>
                 `;
                         wishlist.append(listItem);
                     });
                 },
-
-                // Stuff that may be added later
-                // <p><strong>Genres:</strong> ${game.genres.join(', ')}</p>
-
                 error: function (error) {
                     toastr.error('Failed to load wishlist, if this issue persists, please contact an administrator.');
                 }
