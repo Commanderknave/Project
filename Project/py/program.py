@@ -278,6 +278,7 @@ class fetchUser(Resource):
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         if count!=1:
             return make_response(jsonify({"response": "User Not Found"}), 404)
+        print(rows[0])
         value=json.dumps({"response": rows[0]})
         return make_response(render_template("view.html", value=value))
 api.add_resource(fetchUser, "/fetchUser/<int:user_id>")
