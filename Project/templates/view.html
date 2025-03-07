@@ -229,7 +229,21 @@
         </div>
     </nav>
     <div class="container">
-        <h2 class="mt-4">My Wishlist</h2>
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <h2>My Wishlist</h2>
+            <div class="d-flex align-items-center">
+                <label for="sortPrice" class="me-2">Sort by Price:</label>
+                <select id="sortPrice" class="form-select me-2" onchange="sortWishlist('price', this.value === 'asc')">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+                <label for="filterPurchased" class="me-2">Filter:</label>
+                <select id="filterPurchased" class="form-select" onchange="filterWishlist(this.value === 'purchased')">
+                    <option value="notPurchased">Show Not Purchased</option>
+                    <option value="purchased">Show Purchased</option>
+                </select>
+            </div>
+        </div>
         <ul class="list-group" id="wishlist">
             <!-- List items will be dynamically generated here -->
         </ul>
