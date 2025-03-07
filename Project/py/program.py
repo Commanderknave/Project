@@ -326,57 +326,10 @@ class WishList(Resource):
         return make_response(jsonify({"response": "Operation Successful", "wishlist": rows}) ,200)
 api.add_resource(WishList, "/game/list/<int:user_id>")
 
-class PurchaseGame(Resource):
-    def post(self,user_id,game_id):
-        #Check if user exists
-        sqlProc='fetchUser'
-        sqlArgs=[user_id,]
-        try:
-            rows,count=db_access(sqlProc,sqlArgs)
-        except Exception as e:
-            print(e)
-            return make_response(jsonify({"response": "Internal Server Error"}), 500)
-        if count!=1:
-            return make_response(jsonify({"response": "User Not Found"}), 404)
-
-        #Verify game exists
-        sqlProc='fetchGame'
-        sqlArgs=[game_id,]
-        try:
-            rows,count=db_access(sqlProc,sqlArgs)
-        except Exception as e:
-            print(e)
-            return make_response(jsonify({"response": "Internal Server Error"}), 500)
-        if count!=1:
-            return make_response(jsonify({"response": "Game Not Found"}), 404)
-        
-        #Look for the game
-        sqlProc='fetchUserWishlist'
-        sqlArgs=[int(user_id),]
-        try:
-            rows,count=db_access(sqlProc,sqlArgs)
-        except Exception as e:
-            print(e)
-            return make_response(jsonify({"response": "Internal Server Error"}), 500)
-
-        #User has game(s) in the wishlist
-        for game in rows:
-            if game['game_id']==game_id:
-                sqlProc='purchaseGame'
-                sqlArgs=[int(user_id),game_id]
-                try:
-                    rows,count=db_access(sqlProc,sqlArgs)
-                except Exception as e:
-                    print(e)
-                    return make_response(jsonify({"response": "Internal Server Error"}), 500)
-                #We could send an email notifying of someone purchasing the game for the user
-                return make_response(jsonify({"response": "Operation Successful"}), 200)
-
-        #The user had no such game wished
-        return make_response(jsonify({"response": "Game Was Not Wished By User"}), 404)
-api.add_resource(PurchaseGame, "/game/purchaseGame/<int:user_id>/<int:game_id>")
-
-#endregion
+class Support(Resource):
+    def get(self):
+        return make_response(render_template('support.html'))
+api.add_resource(Support, "/support")
 
 class Support(Resource):
     def get(self):
