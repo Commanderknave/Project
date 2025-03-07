@@ -15,32 +15,36 @@
 
 <!-- Common scripts -->
 <script type="text/javascript">
-    document.getElementById('searchUserForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        const username = document.getElementById('username').value;
-        fetch(`/search_user?username=${username}`)
-            .then(response => response.json())
-            .then(data => {
-                const userList = document.getElementById('userList');
-                userList.innerHTML = '';
-                if (data.length > 0) {
-                    const ul = document.createElement('ul');
-                    ul.classList.add('list-group');
-                    data.forEach(user => {
-                        const li = document.createElement('li');
-                        li.classList.add('list-group-item');
-                        li.textContent = user.username;
-                        ul.appendChild(li);
-                    });
-                    userList.appendChild(ul);
-                } else {
-                    userList.textContent = 'No users found';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+function searchUser(username) {
+    if (username.length <= 4) {
+        toastr.warning("Please enter more than 4 characters to search.");
+        return;
+    }
+    $.ajax({
+        type: "GET",
+        url: "https://" + window.location.hostname + ":8037/user/fetchUserByName/" + username,
+        success: function (data) {
+            if (data.response && data.response === "Operation Successful") {
+                var userList = $("#userList");
+                userList.empty(); // Clear previous results
+                data.users.forEach(function(user) {
+                    userList.append("<div class='list-group-item list-group-item-action'>" + user.username + "</div>");
+                });
+            } else {
+                toastr.error(data.response);
+            }
+        },
+        error: function (xhr, status, error) {
+            toastr.error("An error occurred: " + error);
+        }
     });
+}
+
+$("#searchUserForm").submit(function(event) {
+    event.preventDefault();
+    var username = $("#username").val();
+    searchUser(username);
+});
 
     function logout() {
         // Add your logout logic here
