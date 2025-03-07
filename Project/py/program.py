@@ -206,8 +206,21 @@ api.add_resource(wishGame, "/game/wishGame/<int:game_id>")
 
 class unwishGame(Resource):
     def get(self,game_id):
-        sqlProc='unwishGame'
         user_id = session.get('user_id')
+
+        #Verify game exists
+        sqlProc='fetchGame'
+        sqlArgs=[game_id,]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        if count!=1:
+            return make_response(jsonify({"response": "Game Not Found"}), 404)
+
+        #unwishGame from user
+        sqlProc='unwishGame'
         sqlArgs=[int(user_id),game_id,]
         try:
             rows,count=db_access(sqlProc,sqlArgs)
@@ -215,7 +228,8 @@ class unwishGame(Resource):
             print(e)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         return make_response(jsonify({"response": "Operation Successful"}), 200)
-    
+api.add_resource(unwishGame, "/game/unwishGame/<int:game_id>")
+
 
 class addGame(Resource):
     def get(self):
@@ -226,11 +240,11 @@ class addGame(Resource):
         #Data
         data=request.json
         steamId=data['game_id']
-        response=requests.get(f'https://store.steampowered.com/api/appdetails?appids={steamId}')
-        
+        response=requests.get(f'https://store.steampowered.com/api/appdetails?appids={steamId}', timeout=10)
+
         #Do not fucking ask stu, This shit not bussin
         steam_data=response.json()[steamId]['data']
-        
+
         #Game details parsing because CORS is a pain in my fucking ass
         game_url='https://store.steampowered.com/app/'+str(steamId)
         steamId=steamId
@@ -280,10 +294,7 @@ class fetchUser(Resource):
             return make_response(jsonify({"response": "User Not Found"}), 404)
         value=json.dumps({"response": rows[0]}, default=str, indent=4)
         return make_response(render_template("view.html", value=value))
-api.add_resource(fetchUser, "/fetchUser/<int:user_id>")
-
-        # return make_response(render_template('view.html'))
-
+api.add_resource(fetchUser, "/user/fetchUser/<int:user_id>")
 
 #endregion
 
