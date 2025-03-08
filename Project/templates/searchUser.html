@@ -62,7 +62,8 @@
                             var users = data.users;
                             var resultsHtml = '<ul class="list-group">';
                             users.forEach(function(user) {
-                                resultsHtml += '<li class="list-group-item">' + user.username + '</li>';
+                                resultsHtml += '<li class="list-group-item d-flex justify-content-between align-items-center">' + user.username +
+                                    '<a href="/game/list/' + user.user_id + '" class="btn btn-primary btn-sm">View Wishlist</a></li>';
                             });
                             resultsHtml += '</ul>';
                             $('#searchResults').html(resultsHtml);
