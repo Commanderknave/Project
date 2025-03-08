@@ -43,19 +43,19 @@
             },
             error: function () {
                 toastr.error("The user is not logged in.");
+            },
+            complete: function () {
+                if (current_user) {
+                    $('#nav-register').hide();
+                    $('#nav-login').hide();
+                    $('#nav-account').show();
+                } else {
+                    $('#nav-register').show();
+                    $('#nav-login').show();
+                    $('#nav-account').hide();
+                }
             }
         });
-    });
-    $(document).ready(function () {
-        if (current_user) {
-            $('#nav-register').hide();
-            $('#nav-login').hide();
-            $('#nav-account').show();
-        } else {
-            $('#nav-register').show();
-            $('#nav-login').show();
-            $('#nav-account').hide();
-        }
     });
 </script>
 
