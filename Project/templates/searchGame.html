@@ -1,25 +1,24 @@
 <html>
 
 <head>
-    <title>Search Game</title>
+    <title>Search and Add Game</title>
 
-    {% include '/static/header.html'  ignore missing %}
-
+    {% include '/static/header.html' ignore missing %}
 
     <script type="text/javascript">
-        current_user=''
-        function currentUser(){
+        current_user = ''
+        function currentUser() {
             $.ajax({
                 type: "GET",
                 url: "https://" + window.location.hostname + ":8037/session",
-                success: function(data) {
+                success: function (data) {
                     if (data.response && data.response === "Operation Successful") {
                         current_user = data.sessionId;
                     } else {
                         toastr.error(data.response);
                     }
                 },
-                error: function() {
+                error: function () {
                     toastr.error("The user is not logged in.");
                 }
             });
@@ -29,100 +28,104 @@
         function searchGame() {
             var gamename = $('#game_name').val();
             if (gamename.length >= 1) {
-            $.ajax({
-                type: "GET",
-                url: "https://" + window.location.hostname + ":8037/game/fetchGameByName/" + gamename,
-                success: function(data) {
-                if (data.response && data.response === "Operation Successful") {
-                    var games = data.games;
-                    var resultsHtml = '<ul class="list-group">';
-                    games.forEach(function(game) {
-                    resultsHtml += 
-                        `<li class="list-group-item d-flex justify-content-between align-items-center" id="game-${game.game_id}">
-                        <h5><a href="${game.url}" target="_blank">${game.game_name}</a></h5>
-                        <button class="btn btn-primary mt-2" onclick="addToWishlist(${game.game_id})">Add to Wishlist</button>
-                        </li>`;
-                    });
-                    resultsHtml += '</ul>';
-                    $('#searchResults').html(resultsHtml);
-                } else {
-                    toastr.error(data.response);
-                }
-                },
-                error: function() {
-                toastr.error("An error occurred while searching for games.");
-                }
-            });
+                $.ajax({
+                    type: "GET",
+                    url: "https://" + window.location.hostname + ":8037/game/fetchGameByName/" + gamename,
+                    success: function (data) {
+                        if (data.response && data.response === "Operation Successful") {
+                            var games = data.games;
+                            var resultsHtml = '<ul class="list-group">';
+                            games.forEach(function (game) {
+                                resultsHtml +=
+                                    `<li class="list-group-item d-flex justify-content-between align-items-center" id="game-${game.game_id}">
+                                        <h5><a href="${game.url}" target="_blank">${game.game_name}</a></h5>
+                                        <button class="btn btn-primary mt-2" onclick="addToWishlist(${game.game_id})">Add to Wishlist</button>
+                                    </li>`;
+                            });
+                            resultsHtml += '</ul>';
+                            $('#searchResults').html(resultsHtml);
+                        } else {
+                            toastr.error(data.response);
+                        }
+                    },
+                    error: function () {
+                        toastr.error("An error occurred while searching for games.");
+                    }
+                });
             } else {
-            toastr.warning("Please enter a character to search.");
+                toastr.warning("Please enter a character to search.");
             }
         }
 
         function addToWishlist(game_id) {
             $.ajax({
-            url: "https://" + window.location.hostname + ":8037/game/wishGame/" + game_id,
-            method: 'GET',
-            success: function(data) {
-                if (data.response && data.response === "Operation Successful") {
-                toastr.success('Game added to wishlist successfully.');
-                } else {
-                toastr.error('Failed to add game to wishlist.');
+                url: "https://" + window.location.hostname + ":8037/game/wishGame/" + game_id,
+                method: 'GET',
+                success: function (data) {
+                    if (data.response && data.response === "Operation Successful") {
+                        toastr.success('Game added to wishlist successfully.');
+                    } else {
+                        toastr.error('Failed to add game to wishlist.');
+                    }
+                },
+                error: function (error) {
+                    toastr.error('Failed to add game to wishlist, if this issue persists, please contact an administrator.');
                 }
-            },
-            error: function(error) {
-                toastr.error('Failed to add game to wishlist, if this issue persists, please contact an administrator.');
-            }
             });
         }
 
-        // function removeFromWishlist(game_id) {
-        //     $.ajax({
-        //         url: "https://" + window.location.hostname + ":8037/game/unwishGame/" + game_id,
-        //         method: 'DELETE',
-        //         contentType: "application/json",
-        //         data: JSON.stringify({ user_id: current_user }),
-        //         success: function (data) {
-        //             if (data.response && data.response === "Operation Successful") {
-        //                 $('#game-' + game_id).next('.wishlist-divider').remove();
-        //                 $('#game-' + game_id).remove();
-        //                 toastr.success('Game removed from wishlist.');
-        //             } else {
-        //                 toastr.error('Failed to remove game from wishlist.');
-        //             }
-        //         },
-        //         error: function (error) {
-        //             toastr.error('Failed to remove game from wishlist, if this issue persists, please contact an administrator.');
-        //         }
-        //     });
-        // }
-
-        // function purchaseGame(game_id) {
-        //     $.ajax({
-        //         url: "https://" + window.location.hostname + ":8037/game/purchaseGame/" + current_user + "/" + game_id,
-        //         method: 'POST',
-        //         success: function (data) {
-        //             if (data.response && data.response === "Operation Successful") {
-        //                 $('#game-' + game_id).find('button.btn-primary').replaceWith('<button class="btn btn-secondary mt-2" disabled>Purchased</button>');
-        //                 $('#game-' + game_id).addClass('list-group-item-success');
-        //                 toastr.success('Game purchased successfully.');
-        //             } else {
-        //                 toastr.error('Failed to purchase game.');
-        //             }
-        //         },
-        //         error: function (error) {
-        //             toastr.error('Failed to purchase game, if this issue persists, please contact an administrator.');
-        //         }
-        //     });
-        // }
+        function validateForm() {
+            var steamLink = document.getElementById("steamLink").value;
+            if (steamLink == "") {
+                toastr.error("All fields must be filled out");
+                return false;
+            }
+            var steamLinkRegex = new RegExp("https:\/\/store\.steampowered\.com\/app\/[0-9]+\/");
+            if (!steamLinkRegex.test(steamLink)) {
+                toastr.error("Invalid Steam URL format");
+                return false;
+            }
+            let game_id = steamLink.match(/\/app\/(\d+)\//);
+            if (game_id && game_id[1]) {
+                game_id = game_id[1];
+            } else {
+                toastr.error("Unable to extract game ID from the Steam URL");
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: "https://" + window.location.hostname + ":8037/game/addGame",
+                contentType: "application/json",
+                data: JSON.stringify({ game_id: game_id }),
+                success: function (data) {
+                    if (data.response && data.response === "Operation Successful") {
+                        toastr.success("Game added successfully");
+                    } else {
+                        toastr.error(data.response);
+                    }
+                },
+                statusCode: {
+                    400: function () {
+                        toastr.error("Bad Request: Please check your input and try again.");
+                    },
+                    404: function () {
+                        toastr.error("Not Found: The requested resource could not be found.");
+                    },
+                    500: function () {
+                        toastr.error("Internal Server Error: Please try again later.");
+                    }
+                }
+            });
+        }
     </script>
 
 </head>
 
 <body>
-    {% include '/static/navbar.html'  ignore missing %}
+    {% include '/static/navbar.html' ignore missing %}
     <div class="container-xxl mt-5">
-        <div class="row justify-content-center">
-            <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+        <div class="row">
+            <div class="col-md-6">
                 <div class="card shadow-sm">
                     <div class="card-header text-center">
                         <h1>Search Game</h1>
@@ -137,8 +140,24 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        Add a Steam Game to database
+                    </div>
+                    <div class="card-body">
+                        <form action="addGame" method="post">
+                            <div class="mb-3">
+                                <label for="steamLink" class="form-label">Steam URL</label>
+                                <input type="text" class="form-control" id="steamLink" name="steamLink" placeholder="Enter Steam URL" required>
+                            </div>
+                            <button type="button" class="btn btn-primary w-100" onclick="validateForm()">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
 
-</html>
+</html></div>
