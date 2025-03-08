@@ -29,36 +29,50 @@
         function searchGame() {
             var gamename = $('#game_name').val();
             if (gamename.length >= 1) {
-                $.ajax({
-                    type: "GET",
-                    url: "https://" + window.location.hostname + ":8037/game/fetchGameByName/" + gamename,
-                    success: function(data) {
-                        if (data.response && data.response === "Operation Successful") {
-                            var games = data.games;
-                            var resultsHtml = '<ul class="list-group">';
-                            games.forEach(function(game) {
-                                // <button class="btn btn-primary mt-2" onclick="purchaseGame(' + game.game_id + ')">Purchase</button>
-                                // <button class="btn btn-danger mt-2 ms-2" onclick="removeFromWishlist(' + game.game_id + ')">Remove from wishlist</button>
-
-                                resultsHtml += 
-                                    `<li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <h5><a href="${game.url}" target="_blank">${game.game_name}</a></h5>
-                                        <h5><p>${game.game_id}</p></h5>
-                                    </li>`;
-                            });
-                            resultsHtml += '</ul>';
-                            $('#searchResults').html(resultsHtml);
-                        } else {
-                            toastr.error(data.response);
-                        }
-                    },
-                    error: function() {
-                        toastr.error("An error occurred while searching for games.");
-                    }
-                });
+            $.ajax({
+                type: "GET",
+                url: "https://" + window.location.hostname + ":8037/game/fetchGameByName/" + gamename,
+                success: function(data) {
+                if (data.response && data.response === "Operation Successful") {
+                    var games = data.games;
+                    var resultsHtml = '<ul class="list-group">';
+                    games.forEach(function(game) {
+                    resultsHtml += 
+                        `<li class="list-group-item d-flex justify-content-between align-items-center" id="game-${game.game_id}">
+                        <h5><a href="${game.url}" target="_blank">${game.game_name}</a></h5>
+                        <button class="btn btn-primary mt-2" onclick="addToWishlist(${game.game_id})">Add to Wishlist</button>
+                        </li>`;
+                    });
+                    resultsHtml += '</ul>';
+                    $('#searchResults').html(resultsHtml);
+                } else {
+                    toastr.error(data.response);
+                }
+                },
+                error: function() {
+                toastr.error("An error occurred while searching for games.");
+                }
+            });
             } else {
-                toastr.warning("Please enter a character to search.");
+            toastr.warning("Please enter a character to search.");
             }
+        }
+
+        function addToWishlist(game_id) {
+            $.ajax({
+            url: "https://" + window.location.hostname + ":8037/game/wishGame/" + game_id,
+            method: 'GET',
+            success: function(data) {
+                if (data.response && data.response === "Operation Successful") {
+                toastr.success('Game added to wishlist successfully.');
+                } else {
+                toastr.error('Failed to add game to wishlist.');
+                }
+            },
+            error: function(error) {
+                toastr.error('Failed to add game to wishlist, if this issue persists, please contact an administrator.');
+            }
+            });
         }
 
         // function removeFromWishlist(game_id) {
