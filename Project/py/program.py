@@ -424,7 +424,7 @@ class FetchSession(Resource):
 api.add_resource(FetchSession,"/session")
 
 class getHeader(Resource):
-    def get(self);
+    def get(self):
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 
 class Support(Resource):
