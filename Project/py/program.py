@@ -245,11 +245,11 @@ class AddGame(Resource):
         sqlProc='addGame'
         sqlArgs=[game_url, steamId, game_name, developer, publisher, 
                  release_date, price, game_description, thumbnail]
-
         try:
             rows,count=db_access(sqlProc, sqlArgs)
         except Exception as e:
-            print(e)
+            if "Database Error:(1062" in str(e):
+                return make_response(jsonify({"response": "Duplicate Steam ID"}), 400)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(AddGame, "/game/addGame")
