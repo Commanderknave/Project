@@ -279,26 +279,6 @@ $(function() { $("#nav").load("navbar.html"); });
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mt-4">
             <h2>My Wishlist</h2>
-            <div class="d-flex align-items-center">
-                <div class="dropdown me-2">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="sortPriceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        Sort by Price
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="sortPriceDropdown">
-                        <li><a class="dropdown-item" href="#" onclick="sortWishlist('price', true)">Ascending</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="sortWishlist('price', false)">Descending</a></li>
-                    </ul>
-                </div>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="filterPurchasedDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        Filter
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="filterPurchasedDropdown">
-                        <li><a class="dropdown-item" href="#" onclick="filterWishlist(false)">Show Not Purchased</a></li>
-                        <li><a class="dropdown-item" href="#" onclick="filterWishlist(true)">Show Purchased</a></li>
-                    </ul>
-                </div>
-            </div>
         </div>
         <ul class="list-group" id="wishlist">
             <!-- List items will be dynamically generated here -->
