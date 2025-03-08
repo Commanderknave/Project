@@ -241,7 +241,7 @@ class ForgotPassword(Resource):
             print(e)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         return make_response(jsonify({"response": "Operation Successful"}), 200)
-api.add_resource(ForgotPassword, "/forgotPassword")
+api.add_resource(ForgotPassword, "/user/forgotPassword")
 
 class NewPassword(Resource):
     def get(self,email_hash):
