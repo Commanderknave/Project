@@ -100,6 +100,7 @@
         }
 
         $(document).ready(function () {
+            var current_user = {{ current_user|tojson|safe }};
             if (current_user) {
                 var addGameSectionHtml = `
                     <div class="col-md-6" id="addGameSection">
@@ -117,6 +118,9 @@
                         </div>
                     </div>`;
                 $('.row').append(addGameSectionHtml);
+                $('#searchGameSection').removeClass('col-md-12').addClass('col-md-6');
+            } else {
+                $('#searchGameSection').removeClass('col-md-6').addClass('col-md-12');
             }
         });
     </script>
@@ -127,7 +131,7 @@
     {% include '/static/navbar.html' ignore missing %}
     <div class="container-xxl mt-5">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6" id="searchGameSection">
                 <div class="card shadow-sm">
                     <div class="card-header text-center">
                         <h1>Search Game</h1>
