@@ -192,6 +192,11 @@ class FetchUserByName(Resource):
         return make_response(jsonify({"response": "Operation Successful", "users": rows}), 200)
 api.add_resource(FetchUserByName, "/user/fetchUserByName/<string:username>")
 
+class seachUser(Resource):
+    def get(self):
+        return make_response(render_template('searchUser.html'))
+api.add_resource(seachUser, "/user/search")
+
 class details(Resource):
     pass
 
