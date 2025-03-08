@@ -100,7 +100,6 @@
         }
 
         $(document).ready(function () {
-            var current_user = {{ current_user|tojson|safe }};
             if (current_user) {
                 var addGameSectionHtml = `
                     <div class="col-md-6" id="addGameSection">
