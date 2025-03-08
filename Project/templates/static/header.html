@@ -30,7 +30,7 @@
         });
     }
     var current_user = null;
-    $document.ready(function () {
+    $(document).ready(function () {
         $.ajax({
             type: "GET",
             url: "https://" + window.location.hostname + ":8037/session",
