@@ -106,6 +106,13 @@ CREATE PROCEDURE fetchGame(
 BEGIN
 	SELECT * FROM games WHERE game_id=id;
 END //
+DROP PROCEDURE IF EXISTS fetchGameByName //
+CREATE PROCEDURE fetchGameByName(
+	IN game_name_in VARCHAR(50)
+)
+BEGIN
+	SELECT * FROM games WHERE game_name LIKE CONCAT('%',game_name_in,'%');
+END //
 
 DROP PROCEDURE IF EXISTS wishGame //
 CREATE PROCEDURE wishGame(

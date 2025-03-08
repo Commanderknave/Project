@@ -192,10 +192,10 @@ class FetchUserByName(Resource):
         return make_response(jsonify({"response": "Operation Successful", "users": rows}), 200)
 api.add_resource(FetchUserByName, "/user/fetchUserByName/<string:username>")
 
-class seachUser(Resource):
+class SearchUser(Resource):
     def get(self):
         return make_response(render_template('searchUser.html'))
-api.add_resource(seachUser, "/user/search")
+api.add_resource(SearchUser, "/user/search")
 
 class details(Resource):
     pass
@@ -417,6 +417,20 @@ class PurchaseGame(Resource):
         return make_response(jsonify({"response": "Game Was Not Wished By User"}), 404)
 api.add_resource(PurchaseGame, "/game/purchaseGame/<int:user_id>/<int:game_id>")
 
+class SearchGameByName(Resource):
+    def get(self,game_name):
+        sqlProc='fetchGameByName'
+        sqlArgs=[game_name,]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        if count==0:
+            return make_response(jsonify({"response": "No Such Game(s)"}), 404)
+        return make_response(jsonify({"response": "Operation Successful", "Games": rows}), 200)
+api.add_resource(SearchGameByName, "/game/fetchGameByName/<string:game_name>")
+
 #endregion
 
 #region Stuff lmao
@@ -428,15 +442,10 @@ class FetchSession(Resource):
         return make_response(jsonify({"response": "Operation Successful", "sessionId": session['user_id']}), 200)
 api.add_resource(FetchSession,"/session")
 
-class getHeader(Resource):
-    def get(self):
-        return make_response(jsonify({"response": "Operation Successful"}), 200)
-
 class Support(Resource):
     def get(self):
         return make_response(render_template('support.html'))
 api.add_resource(Support, "/support")
-
 
 class Profile(Resource):
     def get(self):
