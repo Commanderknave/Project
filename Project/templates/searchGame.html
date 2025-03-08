@@ -49,6 +49,21 @@
                         toastr.error('Failed to add game to wishlist.');
                     }
                 },
+                statusCode:
+                {
+                    304: function () {
+                        toastr.error("Not Modified: The game is already in your wishlist.");
+                    },
+                    400: function () {
+                        toastr.error('Bad Request: Please check your input and try again.');
+                    },
+                    404: function () {
+                        toastr.error('Not Found: The requested resource could not be found.');
+                    },
+                    500: function () {
+                        toastr.error('Internal Server Error: Please try again later.');
+                    }
+                },
                 error: function (error) {
                     toastr.error('Failed to add game to wishlist, if this issue persists, please contact an administrator.');
                 }
@@ -86,9 +101,6 @@
                     }
                 },
                 statusCode: {
-                    304: function () {
-                        toastr.error("Not Modified: The game is already in your wishlist.");
-                    },
                     400: function () {
                         toastr.error("Bad Request: Please check your input and try again.");
                     },
