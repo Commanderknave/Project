@@ -101,52 +101,52 @@
 
         $(document).ready(function () {
             if (current_user) {
-                var addGameSectionHtml = `
-                    <div class="col-md-6" id="addGameSection">
-                        <div class="card shadow-sm">
-                            <div class="card-header text-center">
-                                <h2>Add a Steam Game to database</h2>
-                            </div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label for="steamLink" class="form-label">Steam URL</label>
-                                    <input type="text" class="form-control" id="steamLink" name="steamLink" placeholder="Enter Steam URL" required>
-                                </div>
-                                <button type="button" class="btn btn-primary w-100" onclick="validateForm()">Register</button>
-                            </div>
-                        </div>
-                    </div>`;
-                $('.row').append(addGameSectionHtml);
-                $('#searchGameSection').removeClass('col-md-12').addClass('col-md-6');
-            } else {
-                $('#searchGameSection').removeClass('col-md-6').addClass('col-md-12');
-            }
-        });
-    </script>
-
-</head>
-
-<body>
-    {% include '/static/navbar.html' ignore missing %}
-    <div class="container-xxl mt-5">
-        <div class="row">
-            <div class="col-md-6" id="searchGameSection">
+            var addGameSectionHtml = `
+                <div class="col-md-6" id="addGameSection">
                 <div class="card shadow-sm">
                     <div class="card-header text-center">
-                        <h1>Search Game</h1>
+                    <h2>Add a Steam Game to database</h2>
                     </div>
                     <div class="card-body">
-                        <div class="mb-3">
-                            <label for="game_name" class="form-label">Game Name</label>
-                            <input type="text" class="form-control" id="game_name" placeholder="Enter Game Name">
-                        </div>
-                        <button type="button" class="btn btn-primary w-100" onclick="searchGame()">Search</button>
-                        <div id="searchResults" class="mt-3"></div>
+                    <div class="mb-3">
+                        <label for="steamLink" class="form-label">Steam URL</label>
+                        <input type="text" class="form-control" id="steamLink" name="steamLink" placeholder="Enter Steam URL" required>
+                    </div>
+                    <button type="button" class="btn btn-primary w-100" onclick="validateForm()">Register</button>
                     </div>
                 </div>
+                </div>`;
+            $('#searchGameSection').after(addGameSectionHtml);
+            $('#searchGameSection').removeClass('col-md-12').addClass('col-md-6');
+            } else {
+            $('#searchGameSection').removeClass('col-md-6').addClass('col-md-12');
+            }
+        });
+        </script>
+
+    </head>
+
+    <body>
+        {% include '/static/navbar.html' ignore missing %}
+        <div class="container-xxl mt-5">
+        <div class="row">
+            <div class="col-md-12" id="searchGameSection">
+            <div class="card shadow-sm">
+                <div class="card-header text-center">
+                <h1>Search Game</h1>
+                </div>
+                <div class="card-body">
+                <div class="mb-3">
+                    <label for="game_name" class="form-label">Game Name</label>
+                    <input type="text" class="form-control" id="game_name" placeholder="Enter Game Name">
+                </div>
+                <button type="button" class="btn btn-primary w-100" onclick="searchGame()">Search</button>
+                <div id="searchResults" class="mt-3"></div>
+                </div>
+            </div>
             </div>
         </div>
-    </div>
-</body>
+        </div>
+    </body>
 
 </html>
