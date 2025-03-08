@@ -6,25 +6,6 @@
     {% include '/static/header.html' ignore missing %}
 
     <script type="text/javascript">
-        current_user = ''
-        function currentUser() {
-            $.ajax({
-                type: "GET",
-                url: "https://" + window.location.hostname + ":8037/session",
-                success: function (data) {
-                    if (data.response && data.response === "Operation Successful") {
-                        current_user = data.sessionId;
-                    } else {
-                        toastr.error(data.response);
-                    }
-                },
-                error: function () {
-                    toastr.error("The user is not logged in.");
-                }
-            });
-        }
-        currentUser()
-
         function searchGame() {
             var gamename = $('#game_name').val();
             if (gamename.length >= 1) {

@@ -6,31 +6,46 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item">
+                <li class="nav-item" id="nav-register">
                     <a class="nav-link" href="/register">Register</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" id="nav-login"></li>
                     <a class="nav-link" href="/login">Login</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/support">Support</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/game/addGame">Add Game</a>
+                    <a class="nav-link" href="/game/search">Game Browser</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/user/search">Search User</a>
                 </li>
-                <li class="nav-item dropdown margin-start">
+                <li class="nav-item dropdown margin-start" id="nav-account" style="display: none;"></li>
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Account
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="#" onclick="logout()">Logout</a>
                         <a class="dropdown-item" href="/game/list/{{ user_id }}">My Wishlist</a>
+                        <a class="dropdown-item" href="/user/settings">Settings</a>
                     </div>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if (current_user) {
+            $('#nav-register').hide();
+            $('#nav-login').hide();
+            $('#nav-account').show();
+        } else {
+            $('#nav-register').show();
+            $('#nav-login').show();
+            $('#nav-account').hide();
+        }
+    });
+</script>

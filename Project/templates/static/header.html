@@ -15,20 +15,48 @@
 
 <!-- Common scripts -->
 <script type="text/javascript">
-function logout() {
-    // Add your logout logic here
-    $.ajax({
-        type: "GET",
-        url: "https://" + window.location.hostname + ":8037/logout",
-        success: function (data) {
-            if (data.response && data.response === "Operation Successful") {
-                window.location.href = 'login';
-            } else {
-                toastr.error(data.response);
+    function logout() {
+        // Add your logout logic here
+        $.ajax({
+            type: "GET",
+            url: "https://" + window.location.hostname + ":8037/logout",
+            success: function (data) {
+                if (data.response && data.response === "Operation Successful") {
+                    window.location.href = 'login';
+                } else {
+                    toastr.error(data.response);
+                }
             }
+        });
+    }
+    var current_user = null;
+    $document.ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "https://" + window.location.hostname + ":8037/session",
+            success: function (data) {
+                if (data.response && data.response === "Operation Successful") {
+                    current_user = data.sessionId;
+                } else {
+                    toastr.error(data.response);
+                }
+            },
+            error: function () {
+                toastr.error("The user is not logged in.");
+            }
+        });
+    });
+    $(document).ready(function () {
+        if (current_user) {
+            $('#nav-register').hide();
+            $('#nav-login').hide();
+            $('#nav-account').show();
+        } else {
+            $('#nav-register').show();
+            $('#nav-login').show();
+            $('#nav-account').hide();
         }
     });
-}
 </script>
 
 <!-- Search User Button -->
