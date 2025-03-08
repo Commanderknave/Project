@@ -421,6 +421,17 @@ api.add_resource(PurchaseGame, "/game/purchaseGame/<int:user_id>/<int:game_id>")
 
 #region Stuff lmao
 
+class FetchSession(Resource):
+    def get(self):
+        if not 'user_id' in session:
+            return make_response(jsonify({"response": "User is not logged in"}), 404)
+        return make_response(jsonify({"response": "Operation Successful", "sessionId": session['user_id']}), 200)
+api.add_resource(FetchSession,"/session")
+
+class getHeader(Resource):
+    def get(self):
+        return make_response(jsonify({"response": "Operation Successful"}), 200)
+
 class Support(Resource):
     def get(self):
         return make_response(render_template('support.html'))
