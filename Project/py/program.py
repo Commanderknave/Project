@@ -152,9 +152,7 @@ class Login(Resource):
         #There is a user and they're validated
         user=rows[0]
         session['user_id'] = user['user_id']  # Set the user ID in the session
-        response=make_response(jsonify({"response": "Operation Successful"}), 200)
-        response.set_cookie("userId", value=str(user['user_id']))
-        return response
+        return make_response(jsonify({"response": "Operation Successful", "user_id": user['user_id']}), 200)
 api.add_resource(Login, "/login")
 
 class Logout(Resource):
@@ -164,9 +162,6 @@ class Logout(Resource):
         session.pop('user_id')
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(Logout, "/logout")
-
-class fetchRecentLogins(Resource):
-    pass
 
 class FetchUser(Resource):
     def get(self,user_id):
@@ -182,6 +177,25 @@ class FetchUser(Resource):
         value=json.dumps({"response": rows[0]}, default=str, indent=4)
         return make_response(render_template("view.html", value=value))
 api.add_resource(FetchUser, "/user/fetchUser/<int:user_id>")
+
+class FetchUserByName(Resource):
+    def get(self,username):
+        sqlProc='fetchUserByName'
+        sqlArgs=[username,]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        if count==0:
+            return make_response(jsonify({"response": "No Such User(s)"}), 404)
+        return make_response(jsonify({"response": "Operation Successful", "users": rows}), 200)
+api.add_resource(FetchUserByName, "/user/fetchUserByName/<string:username>")
+
+class seachUser(Resource):
+    def get(self):
+        return make_response(render_template('searchUser.html'))
+api.add_resource(seachUser, "/user/search")
 
 class details(Resource):
     pass
@@ -279,8 +293,13 @@ class WishGame(Resource):
 api.add_resource(WishGame, "/game/wishGame/<int:game_id>")
 
 class UnwishGame(Resource):
-    def get(self,game_id):
+    def delete(self,game_id):
         user_id = session.get('user_id')
+
+        # #External user attempting to affect another
+        affectedUser=request.json['user_id']
+        if not int(user_id)==int(affectedUser):
+            return make_response(jsonify({"response": "You cannot edit another's wishlist"}), 403)
 
         #Verify game exists
         sqlProc='fetchGame'
@@ -293,15 +312,35 @@ class UnwishGame(Resource):
         if count!=1:
             return make_response(jsonify({"response": "Game Not Found"}), 404)
 
-        #unwishGame from user
-        sqlProc='unwishGame'
-        sqlArgs=[int(user_id),game_id,]
+        #Get user's wishlist
+        sqlProc='fetchUserWishlist'
+        sqlArgs=[int(user_id),]
         try:
             rows,count=db_access(sqlProc,sqlArgs)
         except Exception as e:
             print(e)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
-        return make_response(jsonify({"response": "Operation Successful"}), 200)
+
+        #Look for the game
+        for game in rows:
+            #Found game
+            if game['game_id']==game_id:
+                #If purchased do not allow removal
+                if game['purchased']==1:
+                    return make_response(jsonify({"response": "Game is purchased"}), 409)
+
+                #Unwish game from user
+                sqlProc='unwishGame'
+                sqlArgs=[int(user_id),game_id,]
+                try:
+                    rows,count=db_access(sqlProc,sqlArgs)
+                except Exception as e:
+                    print(e)
+                    return make_response(jsonify({"response": "Internal Server Error"}), 500)
+                #We could send an email notifying of someone purchasing the game for the user
+                return make_response(jsonify({"response": "Operation Successful"}), 200)
+
+        return make_response(jsonify({"response": "You somehow ran out of games to check whilst getting none removed"}), 500)
 api.add_resource(UnwishGame, "/game/unwishGame/<int:game_id>")
 
 class WishList(Resource):
@@ -328,7 +367,65 @@ class WishList(Resource):
         return make_response(jsonify({"response": "Operation Successful", "wishlist": rows}) ,200)
 api.add_resource(WishList, "/game/list/<int:user_id>")
 
+class PurchaseGame(Resource):
+    def post(self,user_id,game_id):
+        #Check if user exists
+        sqlProc='fetchUser'
+        sqlArgs=[user_id,]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        if count!=1:
+            return make_response(jsonify({"response": "User Not Found"}), 404)
+
+        #Verify game exists
+        sqlProc='fetchGame'
+        sqlArgs=[game_id,]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        if count!=1:
+            return make_response(jsonify({"response": "Game Not Found"}), 404)
+        
+        #Look for the game
+        sqlProc='fetchUserWishlist'
+        sqlArgs=[int(user_id),]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+
+        #User has game(s) in the wishlist
+        for game in rows:
+            if game['game_id']==game_id:
+                sqlProc='purchaseGame'
+                sqlArgs=[int(user_id),game_id]
+                try:
+                    rows,count=db_access(sqlProc,sqlArgs)
+                except Exception as e:
+                    print(e)
+                    return make_response(jsonify({"response": "Internal Server Error"}), 500)
+                #We could send an email notifying of someone purchasing the game for the user
+                return make_response(jsonify({"response": "Operation Successful"}), 200)
+
+        #The user had no such game wished
+        return make_response(jsonify({"response": "Game Was Not Wished By User"}), 404)
+api.add_resource(PurchaseGame, "/game/purchaseGame/<int:user_id>/<int:game_id>")
+
 #endregion
+
+#region Stuff lmao
+
+class Support(Resource):
+    def get(self):
+        return make_response(render_template('support.html'))
+api.add_resource(Support, "/support")
+
 
 class Profile(Resource):
     def get(self):
@@ -338,6 +435,8 @@ class Profile(Resource):
         result="You are at your profile"
         return make_response(jsonify({"profile": result}), 200)
 api.add_resource(Profile, "/")
+
+#endregion
 
 if __name__ == "__main__":
     context = ('cert.pem', 'key.pem')
