@@ -24,7 +24,8 @@
                 if (data.response && data.response === "Operation Successful") {
                     window.location.href = '/login';
                 } else {
-                    toastr.error(data.response);
+                    // Testing only
+                    // toastr.error(data.response);
                 }
             }
         });
@@ -66,6 +67,7 @@
                                     <a class="dropdown-item" href="#" onclick="logout()">Logout</a>
                                     <a class="dropdown-item" href="/user/fetchUser/${current_user}">My Wishlist</a>
                                     <a class="dropdown-item" href="/user/settings">Settings</a>
+                                    <a class="dropdown-item" href="/user/forgotPassword">Change Password</a>
                                 </div>
                             </li>
                         </ul>`;
