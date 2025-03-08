@@ -48,44 +48,48 @@
                 var navHtml = '';
                 if (current_user) {
                     navHtml += `
-                        <li class="nav-item">
-                            <a class="nav-link" href="/support">Support</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/game/search">Game Browser</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/user/search">Search User</a>
-                        </li>
-                        <li class="nav-item dropdown margin-start">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Account
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="#" onclick="logout()">Logout</a>
-                                <a class="dropdown-item" href="/game/list/${current_user}">My Wishlist</a>
-                                <a class="dropdown-item" href="/user/settings">Settings</a>
-                            </div>
-                        </li>`;
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/support">Support</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/game/search">Game Browser</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/user/search">Search User</a>
+                            </li>
+                            <li class="nav-item dropdown margin-start">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Account
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" href="#" onclick="logout()">Logout</a>
+                                    <a class="dropdown-item" href="/game/list/${current_user}">My Wishlist</a>
+                                    <a class="dropdown-item" href="/user/settings">Settings</a>
+                                </div>
+                            </li>
+                        </ul>`;
                 } else {
                     navHtml += `
-                        <li class="nav-item" id="nav-register">
-                            <a class="nav-link" href="/register">Register</a>
-                        </li>
-                        <li class="nav-item" id="nav-login">
-                            <a class="nav-link" href="/login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/support">Support</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/game/search">Game Browser</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/user/search">Search User</a>
-                        </li>`;
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item" id="nav-register">
+                                <a class="nav-link" href="/register">Register</a>
+                            </li>
+                            <li class="nav-item" id="nav-login">
+                                <a class="nav-link" href="/login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/support">Support</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/game/search">Game Browser</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/user/search">Search User</a>
+                            </li>
+                        </ul>`;
                 }
-                $('#navbarNav .navbar-nav').html(navHtml);
+                $('#navbarNav').html(navHtml);
             }
         });
     });
