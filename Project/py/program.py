@@ -428,9 +428,13 @@ class SearchGameByName(Resource):
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         if count==0:
             return make_response(jsonify({"response": "No Such Game(s)"}), 404)
-        return make_response(jsonify({"response": "Operation Successful", "Games": rows}), 200)
+        return make_response(jsonify({"response": "Operation Successful", "games": rows}), 200)
 api.add_resource(SearchGameByName, "/game/fetchGameByName/<string:game_name>")
 
+class SearchGame(Resource):
+    def get(self):
+        return make_response(render_template('searchGame.html'))
+api.add_resource(SearchGame, "/game/search")
 #endregion
 
 #region Stuff lmao
