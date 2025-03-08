@@ -249,7 +249,7 @@ class AddGame(Resource):
             rows,count=db_access(sqlProc, sqlArgs)
         except Exception as e:
             if "Database Error:(1062" in str(e):
-                return make_response(jsonify({"response": "Duplicate Steam ID"}), 400)
+                return make_response(jsonify({"response": "Duplicate Steam ID", "steamId": steamId}), 400)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(AddGame, "/game/addGame")
