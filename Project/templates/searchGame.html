@@ -86,6 +86,9 @@
                     }
                 },
                 statusCode: {
+                    304: function () {
+                        toastr.error("Not Modified: The game is already in your wishlist.");
+                    },
                     400: function () {
                         toastr.error("Bad Request: Please check your input and try again.");
                     },
