@@ -39,10 +39,27 @@ END //
 
 DROP PROCEDURE IF EXISTS invalidateUser //
 CREATE PROCEDURE invalidateUser(
-	IN user_id INT
+	IN user_id_in INT
 )
 BEGIN
-	DELETE FROM verified_emails WHERE user_id=user_id;
+	DELETE FROM verified_emails WHERE user_id=user_id_in;
+END //
+
+DROP PROCEDURE IF EXISTS getUserEmail //
+CREATE PROCEDURE getUserEmail(
+	IN user_id_in INT
+)
+BEGIN
+	SELECT * FROM verified_emails WHERE user_id=user_id_in;
+END //
+
+DROP PROCEDURE IF EXISTS updatePassword //
+CREATE PROCEDURE updatePassword(
+	IN user_id_in INT,
+    IN new_password VARCHAR(255)
+)
+BEGIN
+	UPDATE users SET user_password=new_password WHERE user_id=user_id_in;
 END //
 
 DROP PROCEDURE IF EXISTS loginUser //

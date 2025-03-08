@@ -197,6 +197,74 @@ class SearchUser(Resource):
         return make_response(render_template('searchUser.html'))
 api.add_resource(SearchUser, "/user/search")
 
+class ForgotPassword(Resource):
+    def get(self):
+        return make_response(render_template('forgotPassword.html'))
+    def post(self):
+        #Get Current user's email
+        user_id=session.get('user_id')
+        sqlProc='getUserEmail'
+        sqlArgs=[user_id, ]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        if count!=1:
+            return make_response(jsonify({"response": "User Not Found"}), 404)
+
+        #Email User
+        email=rows[0]['email']
+        email_hash=hashlib.sha512(email.encode("UTF-8")).hexdigest()
+        message=Message(
+            subject="Validate your Games Wishlist account",
+            sender="awesomeinc@unb.ca",
+            recipients=[email]
+        )
+        message.body=f"To validate your account please go to https://cs3103.cs.unb.ca:8037/newPassword/{str(email_hash)}"
+        mail.send(message)
+
+        #Invalidate account
+        sqlProc='invalidateUser'
+        sqlArgs=[user_id,]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        
+        sqlProc='preValidateUser'
+        sqlArgs=[user_id,email,email_hash]
+        try:
+            rows,count=db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+        return make_response(jsonify({"response": "Operation Successful"}), 200)
+api.add_resource(ForgotPassword, "/forgotPassword")
+
+class NewPassword(Resource):
+    def get(self,email_hash):
+        return make_response(render_template('newPassword.html'))
+    def post(self,email_hash):
+        user_id=int(session['user_id'])
+
+        #Get New Password
+        data=request.json
+        newPassword=data['new_password']
+        sqlProc='updatePassword'
+        password_hash=hashlib.sha512(newPassword.encode("UTF-8")).hexdigest()
+        sqlArgs = [user_id, password_hash]
+        rows,count = db_access(sqlProc,sqlArgs)
+        
+        sqlProc='validateUser'
+        sqlArgs = [email_hash,]
+        rows,count = db_access(sqlProc,sqlArgs)
+        if count==0:
+            return make_response(jsonify({"response": "Forbidden Access"}), 403)
+        return make_response(jsonify({"response": "Operation Successful"}), 200)
+api.add_resource(NewPassword, "/newPassword/<string:email_hash>")
+
 class details(Resource):
     pass
 
