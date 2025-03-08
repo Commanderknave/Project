@@ -66,7 +66,7 @@
                 var wishlist = $('#wishlist');
                 data.wishlist.forEach(function (game) {
                 var purchasedText = game.purchased === 1 ? 'Purchased' : 'Not Purchased';
-                var purchaseButton = current_user && game.purchased !== 1 ? '<button class="btn btn-primary mt-2" onclick="purchaseGame(' + game.game_id + ')">Purchase</button>' : '<button class="btn btn-secondary mt-2" disabled>Purchased</button>';
+                var purchaseButton = current_user && game.purchased !== 1 ? '<button class="btn btn-primary mt-2" onclick="purchaseGame(' + game.game_id + ')">Purchase</button>' : '';
                 var listItemClass = game.purchased === 1 ? 'list-group-item-success' : '';
                 var removeButton = current_user && game.purchased !== 1 ? '<button class="btn btn-danger mt-2 ms-2" onclick="removeFromWishlist(' + game.game_id + ')">Remove from wishlist</button>' : '';
                 var releaseDate = new Date(game.release_date).getFullYear() === 1969 ? 'N/A' : new Date(game.release_date).toLocaleDateString();
@@ -79,6 +79,7 @@
                         <p><strong>Price:</strong> $${game.price}</p>
                         <p><strong>Description:</strong> ${game.game_description}</p>
                         <p><strong>Release Date:</strong> ${releaseDate}</p>
+                        <p><strong>Status:</strong> ${purchasedText}</p>
                         <div class="d-flex">
                         ${purchaseButton}
                         ${removeButton}
