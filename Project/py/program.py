@@ -27,19 +27,27 @@ app.config['MAIL_PORT']=25
 mail=Mail(app)
 
 #region Decorators
-# def login_required(f):
-#     @wraps(f)
-#     def wrapper(*args, **kwargs):
-#         if 'user_id' in session:
-#             return f(*args, **kwargs)
-#         return make_response(jsonify({"response": "User is not logged in"}), 404)
-#     return wrapper
+
+def login_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if 'user_id' in session:
+            return f(*args, **kwargs)
+        return make_response(jsonify({"response": "User is not logged in"}), 404)
+    return wrapper
+
 #endregion
 
 #region Functions
+
 def get_ip():
     return request.remote_addr
+
 #endregion
+
+
+
+
 
 #region User Management
 
@@ -290,6 +298,7 @@ class details(Resource):
 
 #region Games
 
+@login_required
 class AddGame(Resource):
     def get(self):
         return make_response(render_template('addGame.html'))
