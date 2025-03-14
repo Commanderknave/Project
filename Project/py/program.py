@@ -300,10 +300,12 @@ class details(Resource):
 
 #region Games
 
-@login_required
 class AddGame(Resource):
+    @login_required
     def get(self):
         return make_response(render_template('addGame.html'))
+    
+    @login_required
     def post(self):
         rejectionReason=""
 
