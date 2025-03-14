@@ -184,6 +184,7 @@ class Login(Resource):
 api.add_resource(Login, "/login")
 
 class Logout(Resource):
+    @login_required
     def get(self):
         if not 'user_id' in session:
             return make_response(jsonify({"response": "User is not logged in"}), 404)
@@ -354,6 +355,7 @@ class AddGame(Resource):
 api.add_resource(AddGame, "/game/addGame")
 
 class WishGame(Resource):
+    @login_required
     def get(self,game_id):
         user_id = session.get('user_id')
 
@@ -392,6 +394,7 @@ class WishGame(Resource):
 api.add_resource(WishGame, "/game/wishGame/<int:game_id>")
 
 class UnwishGame(Resource):
+    @login_required
     def delete(self,game_id):
         user_id = session.get('user_id')
 
@@ -467,6 +470,7 @@ class WishList(Resource):
 api.add_resource(WishList, "/game/list/<int:user_id>")
 
 class PurchaseGame(Resource):
+    @login_required
     def post(self,user_id,game_id):
         #Check if user exists
         sqlProc='fetchUser'
@@ -552,6 +556,7 @@ class Support(Resource):
 api.add_resource(Support, "/support")
 
 class Profile(Resource):
+    @login_required
     def get(self):
         #sqlProc = ''
         #sqlArgs = []
