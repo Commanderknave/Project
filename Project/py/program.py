@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask, request, make_response, jsonify, render_template, session
+from flask import Flask, request, make_response, jsonify, render_template, session, redirect, url_for
 from flask_restful import Resource, Api
 from flask_cors import CORS
 from flask_mail import Mail, Message
@@ -25,6 +25,16 @@ Session(app)
 app.config['MAIL_SERVER']="smtp.unb.ca"
 app.config['MAIL_PORT']=25
 mail=Mail(app)
+
+#region Decorators
+def login_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if 'user_id' in session:
+            return f(*args, **kwargs)
+        return make_response(jsonify({"response": "User is not logged in"}), 404)
+    return wrapper
+#endregion
 
 #region User Management
 
@@ -176,7 +186,7 @@ class FetchUser(Resource):
             return make_response(jsonify({"response": "User Not Found"}), 404)
         value=json.dumps({"response": rows[0]}, default=str, indent=4)
         return make_response(render_template("view.html", value=value))
-api.add_resource(FetchUser, "/user/fetchUser/<int:user_id>")
+api.add_resource(FetchUser, "/user/<int:user_id>")
 
 class FetchUserByName(Resource):
     def get(self,username):
@@ -509,6 +519,7 @@ api.add_resource(SearchGame, "/game/search")
 
 class FetchSession(Resource):
     def get(self):
+        print(session)
         if not 'user_id' in session:
             return make_response(jsonify({"response": "User is not logged in"}), 404)
         return make_response(jsonify({"response": "Operation Successful", "sessionId": session['user_id']}), 200)
