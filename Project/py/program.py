@@ -35,7 +35,7 @@ def login_required(f):
     def wrapper(*args, **kwargs):
         if 'user_id' in session:
             return f(*args, **kwargs)
-        return make_response(jsonify({"response": "User is not logged in"}), 404)
+        return redirect(url_for('login'))
     return wrapper
 
 #endregion
