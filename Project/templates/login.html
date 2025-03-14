@@ -23,7 +23,7 @@
                 data: JSON.stringify({ username: username, user_password: password }),
                 success: function (data) {
                     if (data.response && data.response === "Operation Successful") {
-                        window.location.href = "user/fetchUser/" + data.user_id;
+                        window.location.href = "user/" + data.user_id;
                     } else {
                         alert("Invalid username or password");
                     }
