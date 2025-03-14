@@ -4,6 +4,8 @@ from flask_restful import Resource, Api
 from flask_cors import CORS
 from flask_mail import Mail, Message
 from flask_session import Session
+
+from functools import wraps
 import json
 import requests
 from datetime import datetime
