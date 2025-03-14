@@ -38,6 +38,8 @@ def login_required(f):
         return redirect(url_for('login'))
     return wrapper
 
+    def sanitize_input(input_string):
+        return input_string.replace("'", "''")
 #endregion
 
 #region Functions
