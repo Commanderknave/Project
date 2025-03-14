@@ -27,13 +27,18 @@ app.config['MAIL_PORT']=25
 mail=Mail(app)
 
 #region Decorators
-def login_required(f):
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        if 'user_id' in session:
-            return f(*args, **kwargs)
-        return make_response(jsonify({"response": "User is not logged in"}), 404)
-    return wrapper
+# def login_required(f):
+#     @wraps(f)
+#     def wrapper(*args, **kwargs):
+#         if 'user_id' in session:
+#             return f(*args, **kwargs)
+#         return make_response(jsonify({"response": "User is not logged in"}), 404)
+#     return wrapper
+#endregion
+
+#region Functions
+def get_ip():
+    return request.remote_addr
 #endregion
 
 #region User Management
@@ -161,7 +166,10 @@ class Login(Resource):
 
         #There is a user and they're validated
         user=rows[0]
-        session['user_id'] = user['user_id']  # Set the user ID in the session
+        ip = get_ip()
+        print(ip)
+        session['user_id'] = user['user_id']
+        session['ip'] = ip
         return make_response(jsonify({"response": "Operation Successful", "user_id": user['user_id']}), 200)
 api.add_resource(Login, "/login")
 
