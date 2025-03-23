@@ -12,7 +12,7 @@
             if (username.length >= 4) {
                 $.ajax({
                     type: "GET",
-                    url: "https://" + window.location.hostname + ":8037/user/fetchUserByName/" + username,
+                    url: "https://" + window.location.hostname + ":8037/user/" + username,
                     success: function(data) {
                         if (data.response && data.response === "Operation Successful") {
                             var users = data.users;

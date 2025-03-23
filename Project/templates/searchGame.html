@@ -40,7 +40,7 @@
 
         function addToWishlist(game_id) {
             $.ajax({
-                url: "https://" + window.location.hostname + ":8037/game/wishGame/" + game_id,
+                url: "https://" + window.location.hostname + ":8037/game/wish/" + game_id,
                 method: 'GET',
                 success: function (data) {
                     if (data.response && data.response === "Operation Successful") {
