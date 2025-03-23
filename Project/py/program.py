@@ -105,11 +105,7 @@ class Register(Resource):
             #Most common case is duplicate email.
             sqlProc='deleteUser'
             sqlArgs=[new_user_id,]
-            try:
-                db_access(sqlProc,sqlArgs)
-            except Exception as e2:
-                print(e2)
-            db_access(sqlProc,sqlArgs)            
+            db_access(sqlProc,sqlArgs)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
 
         #Email User
