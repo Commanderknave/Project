@@ -11,7 +11,7 @@
             if (gamename.length >= 1) {
                 $.ajax({
                     type: "GET",
-                    url: "https://" + window.location.hostname + ":8037/game/fetchGameByName/" + gamename,
+                    url: "https://" + window.location.hostname + ":8037/game/" + gamename,
                     success: function (data) {
                         if (data.response && data.response === "Operation Successful") {
                             var games = data.games;

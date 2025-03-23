@@ -1,5 +1,25 @@
 curl -i -X POST -H "Content-Type: application/json" -d '{"username": "JohnDoe", "user_password": "thisisapassword", "email": "JohnDoe73@host.com"}' -k https://cs3103.cs.unb.ca:8037/register
 
-curl -i -X POST -H "Content-Type: application/json" -d '{"username": "JohnDoeJohnDoeJohnDoeJohnDoeJohnDoe", "user_password": "thisisapassword", "email": "JohnDoe73@host.com"}' -k https://cs3103.cs.unb.ca:8037/register
+curl -i -X POST -H "Content-Type: application/json" -d '{"email_hash": "b84afa352ae1dcbf213ff3a76a6e89795c49f085be1756612a4aebe7a0ea1a83ad09faeaa84fb7c4df1119b148b941e8628992006e7d062c9a78b807bd12369c"}' -k https://cs3103.cs.unb.ca:8037/validate
 
-curl -i -X POST -H "Content-Type: application/json" -d "{\"game_id\":\"730\"}" -k https://cs3103.cs.unb.ca:8037/game/addGame
+curl -i -X POST -H "Content-Type: application/json" -d '{"username": "JohnDoe", "user_password": "thisisapassword"}' -k https://cs3103.cs.unb.ca:8037/login
+
+curl -i -X GET -H "Content-Type: application/json" -k https://cs3103.cs.unb.ca:8037/user/83
+
+curl -i -X GET -H "Content-Type: application/json" -k https://cs3103.cs.unb.ca:8037/user/LukeLosier
+
+curl -i -X POST -H "Content-Type: application/json" -d {"new_password": "thiswasapassword" }-k https://cs3103.cs.unb.ca:8037/newPassword/b84afa352ae1dcbf213ff3a76a6e89795c49f085be1756612a4aebe7a0ea1a83ad09faeaa84fb7c4df1119b148b941e8628992006e7d062c9a78b807bd12369c
+
+curl -i -X POST -H "Content-Type: application/json" -d "{"game_id":"2379780"}" -k https://cs3103.cs.unb.ca:8037/game/addGame
+
+curl -i -X GET -H "Content-Type: application/json" -k https://cs3103.cs.unb.ca:8037/game/wish/2379780
+
+curl -i -X DELETE -H "Content-Type: application/json" -k https://cs3103.cs.unb.ca:8037/game/wish/2379780
+
+curl -i -X GET -H "Content-Type: application/json" -k https://cs3103.cs.unb.ca:8037/user/list/83
+
+curl -i -X GET -H "Content-Type: application/json" -k https://cs3103.cs.unb.ca:8037/game/purchase/83/2379780
+
+curl -i -X GET -H "Content-Type: application/json" -k https://cs3103.cs.unb.ca:8037/game/Balatro
+
+curl -i -X GET -H "Content-Type: application/json" -k https://cs3103.cs.unb.ca:8037/session

@@ -518,7 +518,7 @@ class PurchaseGame(Resource):
 
         #The user had no such game wished
         return make_response(jsonify({"response": "Game Was Not Wished By User"}), 404)
-api.add_resource(PurchaseGame, "/game/purchaseGame/<int:user_id>/<int:game_id>")
+api.add_resource(PurchaseGame, "/game/purchase/<int:user_id>/<int:game_id>")
 
 class SearchGameByName(Resource):
     def get(self,game_name):
@@ -532,7 +532,7 @@ class SearchGameByName(Resource):
         if count==0:
             return make_response(jsonify({"response": "No Such Game(s)"}), 404)
         return make_response(jsonify({"response": "Operation Successful", "games": rows}), 200)
-api.add_resource(SearchGameByName, "/game/fetchGameByName/<string:game_name>")
+api.add_resource(SearchGameByName, "/game/<string:game_name>")
 
 class SearchGame(Resource):
     def get(self):
