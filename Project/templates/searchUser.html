@@ -19,7 +19,7 @@
                             var resultsHtml = '<ul class="list-group">';
                             users.forEach(function(user) {
                                 resultsHtml += '<li class="list-group-item d-flex justify-content-between align-items-center">' + user.username +
-                                    '<a href="/user/fetchUser/' + user.user_id + '" class="btn btn-primary btn-sm">View Wishlist</a></li>';
+                                    '<a href="/user/' + user.user_id + '" class="btn btn-primary btn-sm">View Wishlist</a></li>';
                             });
                             resultsHtml += '</ul>';
                             $('#searchResults').html(resultsHtml);
