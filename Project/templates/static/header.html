@@ -39,11 +39,11 @@
                 if (data.response && data.response === "Operation Successful") {
                     current_user = data.sessionId;
                 } else {
-                    // toastr.error(data.response);
+                    toastr.error(data.response);
                 }
             },
             error: function () {
-                toastr.error("The user is not logged in.");
+                // toastr.error("The user is not logged in.");
             },
             complete: function () {
                 var navHtml = '';
