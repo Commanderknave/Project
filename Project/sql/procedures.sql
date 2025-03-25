@@ -26,7 +26,7 @@ CREATE PROCEDURE preValidateUser(
     IN email_hash TEXT
 )
 BEGIN
-	INSERT INTO verified_emails VALUES (user_id,email,email_hash,FROM_UNIXTIME(1));
+	INSERT INTO verified_emails VALUES (user_id,email,email_hash,FROM_UNIXTIME(1),NOW());
 END //
 
 DROP PROCEDURE IF EXISTS validateUser //

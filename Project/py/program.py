@@ -221,7 +221,7 @@ class FetchUserByName(Resource):
         if count==0:
             return make_response(jsonify({"response": "No Such User(s)"}), 404)
         return make_response(jsonify({"response": "Operation Successful", "users": rows}), 200)
-api.add_resource(FetchUserByName, "/user/fetchUserByName/<string:username>")
+api.add_resource(FetchUserByName, "/user/<string:username>")
 
 class SearchUser(Resource):
     def get(self):
@@ -393,9 +393,7 @@ class WishGame(Resource):
             print(e)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         return make_response(jsonify({"response": "Operation Successful"}), 200)
-api.add_resource(WishGame, "/game/wishGame/<int:game_id>")
 
-class UnwishGame(Resource):
     @login_required
     def delete(self,game_id):
         user_id = session.get('user_id')
@@ -445,7 +443,7 @@ class UnwishGame(Resource):
                 return make_response(jsonify({"response": "Operation Successful"}), 200)
 
         return make_response(jsonify({"response": "You somehow ran out of games to check whilst getting none removed"}), 500)
-api.add_resource(UnwishGame, "/game/unwishGame/<int:game_id>")
+api.add_resource(WishGame, "/game/wish/<int:game_id>")
 
 class WishList(Resource):
     def get(self,user_id):
@@ -469,7 +467,7 @@ class WishList(Resource):
             print(e)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         return make_response(jsonify({"response": "Operation Successful", "wishlist": rows}) ,200)
-api.add_resource(WishList, "/game/list/<int:user_id>")
+api.add_resource(WishList, "/user/list/<int:user_id>")
 
 class PurchaseGame(Resource):
     @login_required
@@ -520,7 +518,7 @@ class PurchaseGame(Resource):
 
         #The user had no such game wished
         return make_response(jsonify({"response": "Game Was Not Wished By User"}), 404)
-api.add_resource(PurchaseGame, "/game/purchaseGame/<int:user_id>/<int:game_id>")
+api.add_resource(PurchaseGame, "/game/purchase/<int:user_id>/<int:game_id>")
 
 class SearchGameByName(Resource):
     def get(self,game_name):
@@ -534,7 +532,7 @@ class SearchGameByName(Resource):
         if count==0:
             return make_response(jsonify({"response": "No Such Game(s)"}), 404)
         return make_response(jsonify({"response": "Operation Successful", "games": rows}), 200)
-api.add_resource(SearchGameByName, "/game/fetchGameByName/<string:game_name>")
+api.add_resource(SearchGameByName, "/game/<string:game_name>")
 
 class SearchGame(Resource):
     def get(self):

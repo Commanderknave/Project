@@ -12,14 +12,14 @@
             if (username.length >= 4) {
                 $.ajax({
                     type: "GET",
-                    url: "https://" + window.location.hostname + ":8037/user/fetchUserByName/" + username,
+                    url: "https://" + window.location.hostname + ":8037/user/" + username,
                     success: function(data) {
                         if (data.response && data.response === "Operation Successful") {
                             var users = data.users;
                             var resultsHtml = '<ul class="list-group">';
                             users.forEach(function(user) {
                                 resultsHtml += '<li class="list-group-item d-flex justify-content-between align-items-center">' + user.username +
-                                    '<a href="/user/fetchUser/' + user.user_id + '" class="btn btn-primary btn-sm">View Wishlist</a></li>';
+                                    '<a href="/user/' + user.user_id + '" class="btn btn-primary btn-sm">View Wishlist</a></li>';
                             });
                             resultsHtml += '</ul>';
                             $('#searchResults').html(resultsHtml);

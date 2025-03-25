@@ -1,3 +1,3 @@
 Add a time limit to validation emails being valid.
-
+Change popup for a 404 when searching users and games rather than "An error occurred while searching for games."
 Sanitize Data
