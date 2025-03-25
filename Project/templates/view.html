@@ -121,20 +121,23 @@
 
         function purchaseGame(game_id) {
             $.ajax({
-                url: "https://" + window.location.hostname + ":8037/game/purchase/" + user_id + "/" + game_id,
-                method: 'POST',
-                success: function (data) {
-                    if (data.response && data.response === "Operation Successful") {
-                        $('#game-' + game_id).find('button.btn-primary').replaceWith('<button class="btn btn-secondary mt-2" disabled>Purchased</button>');
-                        $('#game-' + game_id).addClass('list-group-item-success');
-                        toastr.success('Game purchased successfully.');
-                    } else {
-                        toastr.error('Failed to purchase game.');
-                    }
-                },
-                error: function (error) {
-                    toastr.error('Failed to purchase game, if this issue persists, please contact an administrator.');
+            url: "https://" + window.location.hostname + ":8037/game/purchase/" + user_id + "/" + game_id,
+            method: 'POST',
+            success: function (data) {
+                if (data.response && data.response === "Operation Successful") {
+                var gameRow = $('#game-' + game_id);
+                gameRow.find('button.btn-primary').remove(); // Remove the purchase button
+                gameRow.find('button.btn-danger').remove(); // Remove the remove button
+                gameRow.addClass('list-group-item-success'); // Update the row style
+                gameRow.find('p:contains("Status:")').html('<strong>Status:</strong> Purchased'); // Update the purchase status
+                toastr.success('Game purchased successfully.');
+                } else {
+                toastr.error('Failed to purchase game.');
                 }
+            },
+            error: function (error) {
+                toastr.error('Failed to purchase game, if this issue persists, please contact an administrator.');
+            }
             });
         }
 
@@ -197,4 +200,4 @@
         </ul>
     </div>
 </body>
-</html>
+</html>''
