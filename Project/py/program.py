@@ -555,15 +555,10 @@ class Support(Resource):
         return make_response(render_template('support.html'))
 api.add_resource(Support, "/support")
 
-class Profile(Resource):
-    @login_required
+class Home(Resource):
     def get(self):
-        #sqlProc = ''
-        #sqlArgs = []
-        #result = db_access(sqlProc,sqlArgs)
-        result="You are at your profile"
-        return make_response(jsonify({"profile": result}), 200)
-api.add_resource(Profile, "/")
+        return make_response(render_template('root.html'))
+api.add_resource(Home, "/")
 
 #endregion
 
