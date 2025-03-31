@@ -1,3 +1,4 @@
 .vscode/*
 */py/__pycache__/*
 */flask_session/*
+*/flask.out/*
