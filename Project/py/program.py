@@ -317,7 +317,7 @@ class AddGame(Resource):
         steamId=data['game_id']
         response=requests.get(f'https://store.steampowered.com/api/appdetails?appids={steamId}', timeout=10)
 
-        #Do not fucking ask stu, This shit not bussin
+        #Do not fucking ask stu
         steam_data=response.json()[steamId]['data']
 
         #Game details parsing because CORS is a pain in my fucking ass
@@ -351,7 +351,7 @@ class AddGame(Resource):
             rows,count=db_access(sqlProc, sqlArgs)
         except Exception as e:
             if "Database Error:(1062" in str(e):
-                return make_response(jsonify({"response": "Duplicate Steam ID", "steamId": steamId}), 400)
+                return make_response(jsonify({"response": "Duplicate Steam ID", "steamId": steamId}), 304)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(AddGame, "/game/addGame")

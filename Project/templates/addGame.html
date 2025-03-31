@@ -42,6 +42,9 @@
                     400: function () {
                         toastr.error("Bad Request: Please check your input and try again.");
                     },
+                    304: function () {
+                        toastr.info("Not Modified: Steam ID Already Exists.");
+                    },
                     404: function () {
                         toastr.error("Not Found: The requested resource could not be found.");
                     },
