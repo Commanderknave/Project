@@ -94,10 +94,12 @@
                 contentType: "application/json",
                 data: JSON.stringify({ game_id: game_id }),
                 success: function (data) {
-                    if (data.response && data.response === "Operation Successful") {
-                        toastr.success("Game added successfully");
-                    } else {
-                        toastr.error(data.response);
+                    if (data) {
+                        if (data.response && data.response === "Operation Successful") {
+                            toastr.success("Game added successfully");
+                        } else {
+                            toastr.error(data.response);
+                        }
                     }
                 },
                 statusCode: {
