@@ -102,7 +102,7 @@
                 },
                 statusCode: {
                     304: function () {
-                        toaster.info("Not Modified: Game already exists in database.")
+                        toastr.info("Not Modified: Game already exists in database.");
                     },
                     400: function () {
                         toastr.error("Bad Request: Please check your input and try again.");

@@ -6,10 +6,52 @@
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 125-789-849
-131.202.241.41 - - [31/Mar/2025 13:04:06] "GET /game/search HTTP/1.1" 200 -
-131.202.241.41 - - [31/Mar/2025 13:04:06] "GET /session HTTP/1.1" 200 -
-131.202.241.41 - - [31/Mar/2025 13:04:06] "GET /session HTTP/1.1" 200 -
-131.202.241.41 - - [31/Mar/2025 13:04:08] "[36mPOST /game/addGame HTTP/1.1[0m" 304 -
-131.202.241.41 - - [31/Mar/2025 13:04:09] "[36mPOST /game/addGame HTTP/1.1[0m" 304 -
-131.202.241.41 - - [31/Mar/2025 13:04:09] "[36mPOST /game/addGame HTTP/1.1[0m" 304 -
-131.202.241.41 - - [31/Mar/2025 13:04:10] "[36mPOST /game/addGame HTTP/1.1[0m" 304 -
+131.202.241.41 - - [31/Mar/2025 13:09:27] "GET /game/search HTTP/1.1" 200 -
+131.202.241.41 - - [31/Mar/2025 13:09:27] "GET /session HTTP/1.1" 200 -
+131.202.241.41 - - [31/Mar/2025 13:09:27] "GET /session HTTP/1.1" 200 -
+131.202.241.41 - - [31/Mar/2025 13:09:29] "[36mPOST /game/addGame HTTP/1.1[0m" 304 -
+131.202.241.41 - - [31/Mar/2025 13:09:30] "[36mPOST /game/addGame HTTP/1.1[0m" 304 -
+131.202.241.41 - - [31/Mar/2025 13:09:30] "[36mPOST /game/addGame HTTP/1.1[0m" 304 -
+131.202.241.41 - - [31/Mar/2025 13:11:09] "[36mPOST /game/addGame HTTP/1.1[0m" 304 -
+131.202.241.41 - - [31/Mar/2025 13:11:29] "[35m[1mPOST /game/addGame HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home1/ugrads/ivanderp/.local/lib/python3.9/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home1/ugrads/ivanderp/.local/lib/python3.9/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home1/ugrads/ivanderp/.local/lib/python3.9/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home1/ugrads/ivanderp/.local/lib/python3.9/site-packages/flask_restful/__init__.py", line 298, in error_router
+    return original_handler(e)
+  File "/home1/ugrads/ivanderp/.local/lib/python3.9/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home1/ugrads/ivanderp/.local/lib/python3.9/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home1/ugrads/ivanderp/.local/lib/python3.9/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+  File "/home1/ugrads/ivanderp/.local/lib/python3.9/site-packages/flask_restful/__init__.py", line 298, in error_router
+    return original_handler(e)
+  File "/home1/ugrads/ivanderp/.local/lib/python3.9/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home1/ugrads/ivanderp/.local/lib/python3.9/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home1/ugrads/ivanderp/.local/lib/python3.9/site-packages/flask_restful/__init__.py", line 489, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home1/ugrads/ivanderp/.local/lib/python3.9/site-packages/flask/views.py", line 110, in view
+    return current_app.ensure_sync(self.dispatch_request)(**kwargs)  # type: ignore[no-any-return]
+  File "/home1/ugrads/ivanderp/.local/lib/python3.9/site-packages/flask_restful/__init__.py", line 604, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home1/ugrads/ivanderp/cs3103/Project/Project/Project/py/program.py", line 37, in wrapper
+    return f(*args, **kwargs)
+  File "/home1/ugrads/ivanderp/cs3103/Project/Project/Project/py/program.py", line 332, in post
+    date=datetime.strptime(release_date_string, "%d %b, %Y").strftime("%Y-%m-%d")
+  File "/usr/lib64/python3.9/_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+  File "/usr/lib64/python3.9/_strptime.py", line 349, in _strptime
+    raise ValueError("time data %r does not match format %r" %
+ValueError: time data '26/fev./2016' does not match format '%d %b, %Y'
+131.202.241.41 - - [31/Mar/2025 13:11:38] "[36mPOST /game/addGame HTTP/1.1[0m" 304 -
+131.202.241.41 - - [31/Mar/2025 13:11:49] "POST /game/addGame HTTP/1.1" 200 -
+131.202.241.41 - - [31/Mar/2025 13:11:50] "[36mPOST /game/addGame HTTP/1.1[0m" 304 -
+131.202.241.41 - - [31/Mar/2025 13:11:54] "[36mPOST /game/addGame HTTP/1.1[0m" 304 -
+131.202.241.41 - - [31/Mar/2025 13:12:01] "[36mPOST /game/addGame HTTP/1.1[0m" 304 -
