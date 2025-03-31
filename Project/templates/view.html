@@ -58,6 +58,21 @@
         var user_id = parts[parts.length - 1];
         var originalOrder = [];
 
+        $.ajax({
+            type: "GET",
+            url: "https://" + window.location.hostname + ":8037/session",
+            success: function (data) {
+                if (data.response && data.response === "Operation Successful") {
+                    current_user = data.sessionId;
+                } else {
+                    toastr.error(data.response);
+                }
+            },
+            error: function () {
+                // toastr.error("The user is not logged in.");
+            }
+        });
+
         $(document).ready(function () {
             $.ajax({
             url: "https://" + window.location.hostname + ":8037/user/list/" + user_id, // Replace with your API endpoint
