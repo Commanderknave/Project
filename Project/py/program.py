@@ -234,6 +234,7 @@ class ForgotPassword(Resource):
     def post(self):
         #Get Current user's email
         user_id=session.get('user_id')
+        print(user_id)
         sqlProc='getUserEmail'
         sqlArgs=[user_id, ]
         try:
