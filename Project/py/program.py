@@ -244,6 +244,7 @@ class ForgotPassword(Resource):
             print(e)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         if count!=1:
+            print(count)
             return make_response(jsonify({"response": "User Not Found"}), 404)
 
         #Email User
