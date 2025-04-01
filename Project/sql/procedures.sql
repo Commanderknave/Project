@@ -26,7 +26,17 @@ CREATE PROCEDURE preValidateUser(
     IN email_hash TEXT
 )
 BEGIN
-	INSERT INTO verified_emails VALUES (user_id,email,email_hash,FROM_UNIXTIME(1),NOW());
+	INSERT INTO verified_emails (user_id,email,email_hash, verification_time, email_send_time)
+		VALUES (user_id,email,email_hash,FROM_UNIXTIME(1),NOW());
+END //
+
+DROP PROCEDURE IF EXISTS resetValidationTime //
+CREATE PROCEDURE resetValidationTime(
+	IN hash_in VARCHAR(255)
+)
+BEGIN
+	UPDATE verified_emails SET email_send_time=NOW() WHERE email_hash=hash_in;
+    SELECT * FROM verified_emails WHERE email_hash=hash_in;
 END //
 
 DROP PROCEDURE IF EXISTS validateUser //
@@ -34,7 +44,14 @@ CREATE PROCEDURE validateUser(
     IN hash_in VARCHAR(255)
 )
 BEGIN
-	UPDATE verified_emails SET verification_time=NOW() WHERE email_hash=hash_in;
+	DECLARE send_time TIMESTAMP;
+    SELECT email_send_time INTO send_time FROM verified_emails WHERE email_hash=hash_in;
+	IF TIMESTAMPDIFF(SECOND,send_time,NOW())>1800 THEN
+		SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'Token Expired';
+    ELSE
+		UPDATE verified_emails SET verification_time=NOW() WHERE email_hash=hash_in;
+	END IF;
 END //
 
 DROP PROCEDURE IF EXISTS invalidateUser //
@@ -42,7 +59,7 @@ CREATE PROCEDURE invalidateUser(
 	IN user_id_in INT
 )
 BEGIN
-	DELETE FROM verified_emails WHERE user_id=user_id_in;
+	UPDATE verified_emails SET verification_time=FROM_UNIXTIME(1) WHERE user_id=user_id_in;
 END //
 
 DROP PROCEDURE IF EXISTS getUserEmail //
