@@ -100,6 +100,8 @@
                         var listItemClass = game.purchased === 1 ? 'list-group-item-success' : '';
                         var removeButton = (current_user) && (current_user == user_id) && game.purchased !== 1 ? '<button class="btn btn-danger mt-2 ms-2" onclick="removeFromWishlist(' + game.game_id + ')">Remove from wishlist</button>' : '';
                         var releaseDate = new Date(game.release_date).getFullYear() === 1969 ? 'N/A' : new Date(game.release_date).toLocaleDateString();
+                        var addWishlist = (current_user) && (current_user != user_id) && game.purchased !== 1 ? '<button class="btn btn-danger mt-2 ms-2" onclick="addToWishlist(' + game.game_id + ')">Add to your wishlist</button>' : '';
+
                         var listItem = `
                     <li class="list-group-item d-flex justify-content-between align-items-center ${listItemClass} list-item-background border-0" id="game-${game.game_id}" style="background-image: url('${game.thumbnail}');" data-name="${game.game_name}" data-price="${game.price}" data-purchased="${game.purchased}">
                     <div class="list-item-content">
@@ -145,6 +147,38 @@
                 },
                 error: function (error) {
                     toastr.error('Failed to remove game from wishlist, if this issue persists, please contact an administrator.');
+                }
+            });
+        }
+
+        function addToWishlist(game_id) {
+            $.ajax({
+                url: "https://" + window.location.hostname + ":8037/game/wish/" + game_id,
+                method: 'GET',
+                success: function (data) {
+                    if (data.response && data.response === "Operation Successful") {
+                        toastr.success('Game added to wishlist successfully.');
+                    } else {
+                        toastr.error('Failed to add game to wishlist.');
+                    }
+                },
+                statusCode:
+                {
+                    304: function () {
+                        toastr.error("Not Modified: The game is already in your wishlist.");
+                    },
+                    400: function () {
+                        toastr.error('Bad Request: Please check your input and try again.');
+                    },
+                    404: function () {
+                        toastr.error('Not Found: The requested resource could not be found.');
+                    },
+                    500: function () {
+                        toastr.error('Internal Server Error: Please try again later.');
+                    }
+                },
+                error: function (error) {
+                    toastr.error('Failed to add game to wishlist, if this issue persists, please contact an administrator.');
                 }
             });
         }
