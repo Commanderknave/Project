@@ -241,6 +241,8 @@ class ForgotPassword(Resource):
         try:
             rows,count=db_access(sqlProc,sqlArgs)
         except Exception as e:
+            print('Here1')
+            print(e)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         if count!=1:
             return make_response(jsonify({"response": f"{count}"}), 404)
@@ -262,6 +264,7 @@ class ForgotPassword(Resource):
         try:
             rows,count=db_access(sqlProc,sqlArgs)
         except Exception as e:
+            print('Here2')
             print(e)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         
@@ -270,6 +273,7 @@ class ForgotPassword(Resource):
         try:
             rows,count=db_access(sqlProc,sqlArgs)
         except Exception as e:
+            print('Here3')
             print(e)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
         return make_response(jsonify({"response": "Operation Successful"}), 200)
