@@ -191,6 +191,7 @@ class Logout(Resource):
         if not 'user_id' in session:
             return make_response(jsonify({"response": "User is not logged in"}), 404)
         session.pop('user_id')
+        session.pop('ip')
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(Logout, "/logout")
 
