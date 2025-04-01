@@ -298,7 +298,7 @@ class ForgotPassword(Resource):
         try:
             rows,count=db_access(sqlProc,sqlArgs)
         except Exception as e:
-            print(e)
+            print(str(e))
             return make_response(jsonify({"response": "Internal Server Error 3"}), 500)
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(ForgotPassword, "/user/forgotPassword")
