@@ -99,13 +99,16 @@ class Register(Resource):
         sqlArgs=[new_user_id,email,email_hash]
         try:
             rows,count=db_access(sqlProc,sqlArgs)
-        except Exception as e:
+        except pymysql.MySQLError as e:
             print(e)
             #Delete user because of failed prevalidation?
             #Most common case is duplicate email.
             sqlProc='deleteUser'
             sqlArgs=[new_user_id,]
-            db_access(sqlProc,sqlArgs)
+            try:
+                db_access(sqlProc,sqlArgs)
+            except Exception as e2:
+                print(e2)
             return make_response(jsonify({"response": "Internal Server Error"}), 500)
 
         #Email User
