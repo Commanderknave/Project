@@ -33,6 +33,10 @@
                         toastr.error("Not Found: The requested resource could not be found.");
                         $("#content").html('<h1>Not Found</h1><p>The requested resource could not be found.</p>');
                     },
+                    408: function () {
+                        toastr.error("Request Timeout: The token has expired.");
+                        $("#content").html('<h1>Token Expired</h1><p>Please register again.</p>');
+                    },
                     500: function () {
                         toastr.error("Internal Server Error: Please try again later.");
                         $("#content").html('<h1>Internal Server Error</h1><p>Please try again later.</p>');

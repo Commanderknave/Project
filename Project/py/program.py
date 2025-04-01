@@ -131,7 +131,34 @@ class Validate(Resource):
     def post(self,email_hash):
         sqlProc='validateUser'
         sqlArgs = [email_hash,]
-        rows,count = db_access(sqlProc,sqlArgs)
+        try:
+            rows,count = db_access(sqlProc,sqlArgs)
+        except Exception as e:
+            # If the user is expired...
+            if "Token Expired" in str(e):
+                #Add new user in emails table
+                sqlProc='resetValidationTime'
+                sqlArgs=[email_hash,]
+                try:
+                    rows,count=db_access(sqlProc,sqlArgs)
+                except Exception as e:
+                    print(e)
+                    return make_response(jsonify({"response": "Internal Server Error"}), 500)
+
+                email = rows[0]['email']
+                #Email User
+                message=Message(
+                    subject="Validate your Games Wishlist account",
+                    sender="awesomeinc@unb.ca",
+                    recipients=[email]
+                )
+                message.body=f"To validate your account please go to https://cs3103.cs.unb.ca:8037/validate/{str(email_hash)}"
+                mail.send(message)
+
+                return make_response(jsonify({"response": "Request Timeout"}), 408)
+
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+
         if count==0:
             return make_response(jsonify({"response": "Forbidden Access"}), 403)
         return make_response(jsonify({"response": "Operation Successful"}), 200)
