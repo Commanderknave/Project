@@ -90,7 +90,7 @@ class Register(Resource):
         except Exception as e:
             if "Database Error:(1062" in str(e):
                 return make_response(jsonify({"response": "Duplicate Username"}), 400)
-            return make_response(jsonify({"response": "Internal Server Error" + e}), 500)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
 
         #Add new user in emails table
         new_user_id=rows[0]['user_id']
@@ -106,7 +106,7 @@ class Register(Resource):
             sqlProc='deleteUser'
             sqlArgs=[new_user_id,]
             db_access(sqlProc,sqlArgs)
-            return make_response(jsonify({"response": "Internal Server Error" + e}), 500)
+            return make_response(jsonify({"response": "Internal Server Error"}), 500)
 
         #Email User
         message=Message(
