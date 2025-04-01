@@ -269,7 +269,7 @@ class ForgotPassword(Resource):
             rows,count=db_access(sqlProc,sqlArgs)
         except Exception as e:
             print(e)
-            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+            return make_response(jsonify({"response": "Internal Server Error 1"}), 500)
         if count!=1:
             return make_response(jsonify({"response": f"{count}"}), 404)
 
@@ -291,7 +291,7 @@ class ForgotPassword(Resource):
             rows,count=db_access(sqlProc,sqlArgs)
         except Exception as e:
             print(e)
-            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+            return make_response(jsonify({"response": "Internal Server Error 2"}), 500)
         
         sqlProc='preValidateUser'
         sqlArgs=[user_id,email,email_hash]
@@ -299,7 +299,7 @@ class ForgotPassword(Resource):
             rows,count=db_access(sqlProc,sqlArgs)
         except Exception as e:
             print(e)
-            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+            return make_response(jsonify({"response": "Internal Server Error 3"}), 500)
         return make_response(jsonify({"response": "Operation Successful"}), 200)
 api.add_resource(ForgotPassword, "/user/forgotPassword")
 
