@@ -106,7 +106,7 @@ class Register(Resource):
             sqlProc='deleteUser'
             sqlArgs=[new_user_id,]
             db_access(sqlProc,sqlArgs)
-            return make_response(jsonify({"response": "Internal Server Error"}), 500)
+            return make_response(jsonify({"response": "Internal Server Error" + e}), 500)
 
         #Email User
         message=Message(
