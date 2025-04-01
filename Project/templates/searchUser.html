@@ -27,9 +27,17 @@
                             toastr.error(data.response);
                         }
                     },
-                    error: function() {
-                        toastr.error("An error occurred while searching for users.");
-                    }
+                    statusCode: {
+                        400: function() {
+                            toastr.error('Bad Request: Please check your input and try again.');
+                        },
+                        404: function() {
+                            toastr.error('User Not Found: The requested user does not exsist.');
+                        },
+                        500: function() {
+                            toastr.error('Internal Server Error: Please try again later.');
+                        }
+                    },
                 });
             } else {
                 toastr.warning("Please enter at least 4 characters to search.");
