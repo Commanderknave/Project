@@ -293,8 +293,8 @@ class ForgotPassword(Resource):
             print(e)
             return make_response(jsonify({"response": "Internal Server Error 2"}), 500)
         
-        sqlProc='preValidateUser'
-        sqlArgs=[user_id,email,email_hash]
+        sqlProc='resetValidationTime'
+        sqlArgs=[email_hash,]
         try:
             rows,count=db_access(sqlProc,sqlArgs)
         except Exception as e:
