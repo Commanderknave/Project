@@ -346,9 +346,10 @@ class AddGame(Resource):
         steamId=data['game_id']
         response=requests.get(f'https://store.steampowered.com/api/appdetails?appids={steamId}', timeout=10)
 
-
+        #Check if the game exists
         if response.json()[steamId]['success'] == False:
             return make_response(jsonify({"response": "Game Not Found"}), 404)
+
 
         #Do not fucking ask stu
         steam_data=response.json()[steamId]['data']
