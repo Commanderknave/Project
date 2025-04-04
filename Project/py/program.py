@@ -349,6 +349,8 @@ class AddGame(Resource):
         #Do not fucking ask stu
         steam_data=response.json()[steamId]['data']
 
+        print(steam_data[steamId]['success'])
+        #Check if the game exists
         if steam_data[steamId]['success'] == False:
             return make_response(jsonify({"response": "Game Not Found"}), 404)
 
