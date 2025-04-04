@@ -349,6 +349,9 @@ class AddGame(Resource):
         #Do not fucking ask stu
         steam_data=response.json()[steamId]['data']
 
+        if not steam_data['success']:
+            return make_response(jsonify({"response": "Game Not Found"}), 404)
+
         #Game details parsing because CORS is a pain in my fucking ass
         game_url='https://store.steampowered.com/app/'+str(steamId)
         steamId=steamId
